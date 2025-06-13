@@ -2,11 +2,11 @@
 
 # Check the current branch
 check_current_branch() {
-    echo "\n🔍 Checking current Git branch...\n"
+    echo "🔍 Checking current Git branch..."
     CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
     if [ "$CURRENT_BRANCH" = "master" ] || [ "$CURRENT_BRANCH" = "dev" ]; then
-        echo "❌ Commit blocked on '$CURRENT_BRANCH'. Please use a feature branch.\n"
+        echo "❌ Commit blocked on '$CURRENT_BRANCH'. Please use a feature branch."
         echo "💡 Switch or create a new branch to continue."
         exit 1
     else
@@ -16,12 +16,12 @@ check_current_branch() {
 
 # Run Spotless check and auto-format if needed
 run_spotless_checks() {
-    echo "\n🧹 Running Spotless...\n"
+    echo "🧹 Running Spotless..."
     ./gradlew spotlessCheck --daemon > /tmp/spotless-result
     if [ $? -ne 0 ]; then
         cat /tmp/spotless-result
         rm /tmp/spotless-result
-        echo "⚠️ Formatting issues found. Applying fixes...\n"
+        echo "⚠️ Formatting issues found. Applying fixes..."
         ./gradlew spotlessApply --daemon > /tmp/spotless-result
     fi
     rm /tmp/spotless-result
@@ -30,36 +30,36 @@ run_spotless_checks() {
 
 # Run Detekt check
 run_detekt_checks() {
-    echo "\n🔎 Running Detekt..."
+    echo "🔎 Running Detekt..."
     ./gradlew detekt > /tmp/detekt-result
     if [ $? -ne 0 ]; then
         cat /tmp/detekt-result
         rm /tmp/detekt-result
-        echo "❌ Detekt found issues. Please fix them before committing.\n"
+        echo "❌ Detekt found issues. Please fix them before committing."
         exit 1
     fi
     rm /tmp/detekt-result
-    echo "✅ Detekt check passed.\n"
+    echo "✅ Detekt check passed."
 }
 
 # Run dependency guard
 run_dependency_guard() {
-    echo "\n📦 Checking dependency baseline...\n"
+    echo "📦 Checking dependency baseline..."
     ./gradlew dependencyGuard > /tmp/dependency-result
     if [ $? -ne 0 ]; then
         cat /tmp/dependency-result
         rm /tmp/dependency-result
-        echo "⚠️ Issue generating dependency baseline. Retrying...\n"
+        echo "⚠️ Issue generating dependency baseline. Retrying..."
         ./gradlew dependencyGuardBaseline > /tmp/dependency-result
     fi
     rm /tmp/dependency-result
-    echo "✅ Dependency guard check complete.\n"
+    echo "✅ Dependency guard check complete."
 }
 
 # Print final success message
 print_success_message() {
     GIT_USERNAME=$(git config user.name)
-    echo "\n🎉 All checks passed. Well done, $GIT_USERNAME!\n"
+    echo "🎉 All checks passed. Well done, $GIT_USERNAME!"
     echo "🚀 Ready to push your code!"
 }
 
