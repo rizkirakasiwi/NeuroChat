@@ -51,25 +51,25 @@ fun AppPasswordField(
     val focusRequester = remember { FocusRequester() }
     AppOutlinedTextField(
         modifier =
-            modifier
-                .tabNavigation()
-                .focusRequester(focusRequester),
+        modifier
+            .tabNavigation()
+            .focusRequester(focusRequester),
         label = label,
         value = value,
         onValueChange = onValueChange,
         visualTransformation =
-            when {
-                !showPassword -> PasswordVisualTransformation()
-                readOnly -> nonLetterColorVisualTransformation()
-                else -> VisualTransformation.None
-            },
+        when {
+            !showPassword -> PasswordVisualTransformation()
+            readOnly -> nonLetterColorVisualTransformation()
+            else -> VisualTransformation.None
+        },
         singleLine = singleLine,
         readOnly = readOnly,
         keyboardOptions =
-            KeyboardOptions(
-                keyboardType = keyboardType,
-                imeAction = imeAction,
-            ),
+        KeyboardOptions(
+            keyboardType = keyboardType,
+            imeAction = imeAction,
+        ),
         keyboardActions = keyboardActions,
         errorText = hint,
         trailingIcon = {

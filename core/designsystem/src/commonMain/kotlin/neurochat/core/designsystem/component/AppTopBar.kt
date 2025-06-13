@@ -45,9 +45,9 @@ fun AppTopBar(
             }
         },
         colors =
-            TopAppBarDefaults.centerAlignedTopAppBarColors(
-                containerColor = Color.Transparent,
-            ),
+        TopAppBarDefaults.centerAlignedTopAppBarColors(
+            containerColor = Color.Transparent,
+        ),
         actions = actions,
         modifier = modifier,
     )

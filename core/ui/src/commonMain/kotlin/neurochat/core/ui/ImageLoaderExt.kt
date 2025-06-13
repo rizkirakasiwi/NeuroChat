@@ -40,6 +40,7 @@ fun rememberImageLoader(context: PlatformContext): ImageLoader {
  * @return A default configured [ImageLoader] instance
  */
 private const val MAX_SIZE_PERCENT = 0.25
+
 @Composable
 internal fun rememberDefaultImageLoader(context: PlatformContext): ImageLoader {
     return remember(context) {

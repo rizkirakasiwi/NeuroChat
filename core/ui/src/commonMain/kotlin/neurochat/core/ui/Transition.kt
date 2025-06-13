@@ -257,10 +257,10 @@ object RootTransitionProviders {
             ) +
                 fadeIn(
                     animationSpec =
-                        tween(
-                            durationMillis = totalTransitionDurationMs / 2,
-                            delayMillis = totalTransitionDurationMs / 2,
-                        ),
+                    tween(
+                        durationMillis = totalTransitionDurationMs / 2,
+                        delayMillis = totalTransitionDurationMs / 2,
+                    ),
                 )
         }
 
@@ -275,10 +275,10 @@ object RootTransitionProviders {
             ) +
                 fadeIn(
                     animationSpec =
-                        tween(
-                            durationMillis = totalTransitionDurationMs / 2,
-                            delayMillis = totalTransitionDurationMs / 2,
-                        ),
+                    tween(
+                        durationMillis = totalTransitionDurationMs / 2,
+                        delayMillis = totalTransitionDurationMs / 2,
+                    ),
                 )
         }
 
@@ -336,18 +336,18 @@ object RootTransitionProviders {
             val slideWithoutDelayMs = totalTransitionDurationMs - delayMs
             slideOutHorizontally(
                 animationSpec =
-                    tween(
-                        durationMillis = slideWithoutDelayMs,
-                        delayMillis = delayMs,
-                    ),
+                tween(
+                    durationMillis = slideWithoutDelayMs,
+                    delayMillis = delayMs,
+                ),
                 targetOffsetX = { fullWidth -> -fullWidth / 2 },
             ) +
                 fadeOut(
                     animationSpec =
-                        tween(
-                            durationMillis = totalTransitionDurationMs / 2,
-                            delayMillis = delayMs,
-                        ),
+                    tween(
+                        durationMillis = totalTransitionDurationMs / 2,
+                        delayMillis = delayMs,
+                    ),
                 )
         }
 
@@ -361,18 +361,18 @@ object RootTransitionProviders {
             val slideWithoutDelayMs = totalTransitionDurationMs - delayMs
             slideOutHorizontally(
                 animationSpec =
-                    tween(
-                        durationMillis = slideWithoutDelayMs,
-                        delayMillis = delayMs,
-                    ),
+                tween(
+                    durationMillis = slideWithoutDelayMs,
+                    delayMillis = delayMs,
+                ),
                 targetOffsetX = { fullWidth -> fullWidth / 2 },
             ) +
                 fadeOut(
                     animationSpec =
-                        tween(
-                            durationMillis = totalTransitionDurationMs / 2,
-                            delayMillis = delayMs,
-                        ),
+                    tween(
+                        durationMillis = totalTransitionDurationMs / 2,
+                        delayMillis = delayMs,
+                    ),
                 )
         }
 

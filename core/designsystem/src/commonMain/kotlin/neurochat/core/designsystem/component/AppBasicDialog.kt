@@ -37,15 +37,15 @@ fun AppBasicDialog(
                     )
                 },
                 title =
-                    visibilityState.title.let {
-                        {
-                            Text(
-                                text = it,
-                                style = MaterialTheme.typography.headlineSmall,
-                                modifier = Modifier.testTag("AlertTitleText"),
-                            )
-                        }
-                    },
+                visibilityState.title.let {
+                    {
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.headlineSmall,
+                            modifier = Modifier.testTag("AlertTitleText"),
+                        )
+                    }
+                },
                 text = {
                     Text(
                         text = visibilityState.message,
@@ -55,9 +55,9 @@ fun AppBasicDialog(
                 },
                 containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                 modifier =
-                    Modifier.semantics {
-                        testTag = "AlertPopup"
-                    },
+                Modifier.semantics {
+                    testTag = "AlertPopup"
+                },
             )
         }
     }
@@ -92,15 +92,15 @@ fun AppBasicDialog(
                     )
                 },
                 title =
-                    visibilityState.title.let {
-                        {
-                            Text(
-                                text = it,
-                                style = MaterialTheme.typography.headlineSmall,
-                                modifier = Modifier.testTag("AlertTitleText"),
-                            )
-                        }
-                    },
+                visibilityState.title.let {
+                    {
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.headlineSmall,
+                            modifier = Modifier.testTag("AlertTitleText"),
+                        )
+                    }
+                },
                 text = {
                     Text(
                         text = visibilityState.message,
@@ -110,9 +110,9 @@ fun AppBasicDialog(
                 },
                 containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
                 modifier =
-                    Modifier.semantics {
-                        testTag = "AlertPopup"
-                    },
+                Modifier.semantics {
+                    testTag = "AlertPopup"
+                },
             )
         }
     }
@@ -123,10 +123,10 @@ private fun AppBasicDialog_preview() {
     AppTheme {
         AppBasicDialog(
             visibilityState =
-                BasicDialogState.Shown(
-                    title = "An error has occurred.",
-                    message = "Username or password is incorrect. Try again.",
-                ),
+            BasicDialogState.Shown(
+                title = "An error has occurred.",
+                message = "Username or password is incorrect. Try again.",
+            ),
             onDismissRequest = {},
         )
     }

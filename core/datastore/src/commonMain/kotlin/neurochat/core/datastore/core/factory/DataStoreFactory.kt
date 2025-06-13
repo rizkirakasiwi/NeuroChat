@@ -9,6 +9,7 @@ package neurochat.core.datastore.core.factory
 import com.russhwolf.settings.Settings
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import neurochat.core.datastore.core.DefaultReactivePreferencesRepository
 import neurochat.core.datastore.core.ReactivePreferencesRepository
 import neurochat.core.datastore.core.cache.CacheManager
 import neurochat.core.datastore.core.cache.LruCacheManager
@@ -25,9 +26,8 @@ import neurochat.core.datastore.core.reactive.DefaultChangeNotifier
 import neurochat.core.datastore.core.reactive.DefaultValueObserver
 import neurochat.core.datastore.core.serialization.JsonSerializationStrategy
 import neurochat.core.datastore.core.serialization.SerializationStrategy
-import neurochat.core.datastore.core.validation.DefaultPreferencesValidator
-import neurochat.core.datastore.core.DefaultReactivePreferencesRepository
 import neurochat.core.datastore.core.store.ReactiveUserPreferencesDataStore
+import neurochat.core.datastore.core.validation.DefaultPreferencesValidator
 import neurochat.core.datastore.core.validation.PreferencesValidator
 
 /**

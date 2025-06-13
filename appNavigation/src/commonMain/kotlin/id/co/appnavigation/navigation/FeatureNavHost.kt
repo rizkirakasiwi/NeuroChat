@@ -24,7 +24,7 @@ internal fun FeatureNavHost(
 ) {
     NavHost(
         route = NavGraphRoute.MAIN_GRAPH,
-        startDestination = "HOME_ROUTE", // feature/home
+        startDestination = "HOME_ROUTE",
         navController = navController,
         modifier = modifier,
     ) {

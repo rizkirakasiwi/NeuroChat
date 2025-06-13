@@ -50,11 +50,11 @@ fun AppTopAppBar(
         title = title,
         scrollBehavior = scrollBehavior,
         navigationIcon =
-            NavigationIcon(
-                navigationIcon = navigationIcon,
-                navigationIconContentDescription = navigationIconContentDescription,
-                onNavigationIconClick = onNavigationIconClick,
-            ),
+        NavigationIcon(
+            navigationIcon = navigationIcon,
+            navigationIconContentDescription = navigationIconContentDescription,
+            onNavigationIconClick = onNavigationIconClick,
+        ),
         modifier = modifier,
         actions = actions,
     )
@@ -218,16 +218,16 @@ private fun AppTopAppBar_preview() {
         AppTopAppBar(
             title = "Title",
             scrollBehavior =
-                TopAppBarDefaults
-                    .exitUntilCollapsedScrollBehavior(
-                        rememberTopAppBarState(),
-                    ),
-            navigationIcon =
-                NavigationIcon(
-                    navigationIcon = AppIcons.Back,
-                    navigationIconContentDescription = "Back",
-                    onNavigationIconClick = { },
+            TopAppBarDefaults
+                .exitUntilCollapsedScrollBehavior(
+                    rememberTopAppBarState(),
                 ),
+            navigationIcon =
+            NavigationIcon(
+                navigationIcon = AppIcons.Back,
+                navigationIconContentDescription = "Back",
+                onNavigationIconClick = { },
+            ),
         )
     }
 }
@@ -240,16 +240,16 @@ private fun AppTopAppBarOverflow_preview() {
         AppTopAppBar(
             title = "Title that is too long for the top line",
             scrollBehavior =
-                TopAppBarDefaults
-                    .exitUntilCollapsedScrollBehavior(
-                        rememberTopAppBarState(),
-                    ),
-            navigationIcon =
-                NavigationIcon(
-                    navigationIcon = AppIcons.Close,
-                    navigationIconContentDescription = "Close",
-                    onNavigationIconClick = { },
+            TopAppBarDefaults
+                .exitUntilCollapsedScrollBehavior(
+                    rememberTopAppBarState(),
                 ),
+            navigationIcon =
+            NavigationIcon(
+                navigationIcon = AppIcons.Close,
+                navigationIconContentDescription = "Close",
+                onNavigationIconClick = { },
+            ),
         )
     }
 }
@@ -262,16 +262,16 @@ private fun AppTopAppBarOverflowCutoff_preview() {
         AppTopAppBar(
             title = "Title that is too long for the top line and the bottom line",
             scrollBehavior =
-                TopAppBarDefaults
-                    .exitUntilCollapsedScrollBehavior(
-                        rememberTopAppBarState(),
-                    ),
-            navigationIcon =
-                NavigationIcon(
-                    navigationIcon = AppIcons.Close,
-                    navigationIconContentDescription = "Close",
-                    onNavigationIconClick = { },
+            TopAppBarDefaults
+                .exitUntilCollapsedScrollBehavior(
+                    rememberTopAppBarState(),
                 ),
+            navigationIcon =
+            NavigationIcon(
+                navigationIcon = AppIcons.Close,
+                navigationIconContentDescription = "Close",
+                onNavigationIconClick = { },
+            ),
         )
     }
 }

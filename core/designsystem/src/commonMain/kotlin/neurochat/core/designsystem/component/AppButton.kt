@@ -121,8 +121,8 @@ fun AppOutlinedButton(
     OutlinedButton(
         onClick = onClick,
         modifier =
-            modifier
-                .height(48.dp),
+        modifier
+            .height(48.dp),
         enabled = enabled,
         shape = shape,
         colors = colors,
@@ -153,9 +153,9 @@ fun AppTextButton(
         modifier = modifier,
         enabled = enabled,
         colors =
-            ButtonDefaults.textButtonColors(
-                contentColor = MaterialTheme.colorScheme.onBackground,
-            ),
+        ButtonDefaults.textButtonColors(
+            contentColor = MaterialTheme.colorScheme.onBackground,
+        ),
         content = content,
     )
 }
@@ -212,11 +212,11 @@ private fun AppButtonContent(
             Modifier
                 .padding(
                     start =
-                        if (leadingIcon != null) {
-                            ButtonDefaults.IconSpacing
-                        } else {
-                            0.dp
-                        },
+                    if (leadingIcon != null) {
+                        ButtonDefaults.IconSpacing
+                    } else {
+                        0.dp
+                    },
                 ),
         ) {
             text()

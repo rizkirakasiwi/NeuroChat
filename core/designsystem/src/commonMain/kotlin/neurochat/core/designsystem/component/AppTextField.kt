@@ -94,16 +94,16 @@ fun AppOutlinedTextField(
             }
         },
         supportingText =
-            errorText?.let {
-                {
-                    Text(
-                        modifier = Modifier.testTag("errorTag"),
-                        text = it,
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.error,
-                    )
-                }
-            },
+        errorText?.let {
+            {
+                Text(
+                    modifier = Modifier.testTag("errorTag"),
+                    text = it,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.error,
+                )
+            }
+        },
     )
 }
 
@@ -168,16 +168,16 @@ fun AppTextField(
             }
         },
         supportingText =
-            errorText?.let {
-                {
-                    Text(
-                        modifier = Modifier.testTag("errorTag"),
-                        text = it,
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.error,
-                    )
-                }
-            },
+        errorText?.let {
+            {
+                Text(
+                    modifier = Modifier.testTag("errorTag"),
+                    text = it,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.error,
+                )
+            }
+        },
     )
 }
 
@@ -195,9 +195,9 @@ private fun ClearIconButton(
         IconButton(
             onClick = onClickClearIcon,
             modifier =
-                Modifier.semantics {
-                    contentDescription = "clearIcon"
-                },
+            Modifier.semantics {
+                contentDescription = "clearIcon"
+            },
         ) {
             Icon(
                 imageVector = clearIcon,

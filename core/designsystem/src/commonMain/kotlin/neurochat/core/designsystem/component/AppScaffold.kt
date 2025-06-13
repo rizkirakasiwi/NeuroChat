@@ -68,30 +68,30 @@ fun AppScaffold(
             val internalPullToRefreshState = rememberPullToRefreshState()
             Box(
                 modifier =
-                    Modifier.pullToRefresh(
-                        state = internalPullToRefreshState,
-                        isRefreshing = pullToRefreshState.isRefreshing,
-                        onRefresh = pullToRefreshState.onRefresh,
-                        enabled = pullToRefreshState.isEnabled,
-                    ),
+                Modifier.pullToRefresh(
+                    state = internalPullToRefreshState,
+                    isRefreshing = pullToRefreshState.isRefreshing,
+                    onRefresh = pullToRefreshState.onRefresh,
+                    enabled = pullToRefreshState.isEnabled,
+                ),
             ) {
                 content(paddingValues)
 
                 PullToRefreshDefaults.Indicator(
                     modifier =
-                        Modifier
-                            .padding(paddingValues)
-                            .align(Alignment.TopCenter),
+                    Modifier
+                        .padding(paddingValues)
+                        .align(Alignment.TopCenter),
                     isRefreshing = pullToRefreshState.isRefreshing,
                     state = internalPullToRefreshState,
                 )
             }
         },
         modifier =
-            modifier
-                .fillMaxSize()
-                .navigationBarsPadding()
-                .imePadding(),
+        modifier
+            .fillMaxSize()
+            .navigationBarsPadding()
+            .imePadding(),
     )
 }
 
@@ -112,10 +112,10 @@ fun AppScaffold(
 ) {
     Scaffold(
         modifier =
-            modifier
-                .fillMaxSize()
-                .navigationBarsPadding()
-                .imePadding(),
+        modifier
+            .fillMaxSize()
+            .navigationBarsPadding()
+            .imePadding(),
         topBar = topBar,
         bottomBar = bottomBar,
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -132,20 +132,20 @@ fun AppScaffold(
             val internalPullToRefreshState = rememberPullToRefreshState()
             Box(
                 modifier =
-                    Modifier.pullToRefresh(
-                        state = internalPullToRefreshState,
-                        isRefreshing = pullToRefreshState.isRefreshing,
-                        onRefresh = pullToRefreshState.onRefresh,
-                        enabled = pullToRefreshState.isEnabled,
-                    ),
+                Modifier.pullToRefresh(
+                    state = internalPullToRefreshState,
+                    isRefreshing = pullToRefreshState.isRefreshing,
+                    onRefresh = pullToRefreshState.onRefresh,
+                    enabled = pullToRefreshState.isEnabled,
+                ),
             ) {
                 content(paddingValues)
 
                 PullToRefreshDefaults.Indicator(
                     modifier =
-                        Modifier
-                            .padding(paddingValues)
-                            .align(Alignment.TopCenter),
+                    Modifier
+                        .padding(paddingValues)
+                        .align(Alignment.TopCenter),
                     isRefreshing = pullToRefreshState.isRefreshing,
                     state = internalPullToRefreshState,
                 )

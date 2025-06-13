@@ -25,6 +25,7 @@ class DefaultPreferencesValidator : PreferencesValidator {
         private const val MAX_KEY_LENGTH = 255
         private const val MAX_VALUE_LENGTH = 10000
     }
+
     /**
      * {@inheritDoc}
      */

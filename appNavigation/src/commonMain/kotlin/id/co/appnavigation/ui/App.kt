@@ -36,7 +36,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.composed
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -119,9 +118,9 @@ internal fun App(
                     onNavigateToDestination = appState::navigateToTopLevelDestination,
                     currentDestination = appState.currentDestination,
                     modifier =
-                        Modifier
-                            .testTag("CmpNavRail")
-                            .safeDrawingPadding(),
+                    Modifier
+                        .testTag("CmpNavRail")
+                        .safeDrawingPadding(),
                 )
             }
 
@@ -204,9 +203,9 @@ private fun AppBar(
             }
         },
         colors =
-            TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent,
-            ),
+        TopAppBarDefaults.topAppBarColors(
+            containerColor = Color.Transparent,
+        ),
         modifier = modifier.testTag("ilmiTopAppBar"),
     )
 }
@@ -232,9 +231,13 @@ private fun NavRail(
                         contentDescription = null,
                     )
                 },
-                modifier = if (hasUnread) Modifier.notificationDot(
-                    MaterialTheme.colorScheme.tertiary
-                ) else Modifier,
+                modifier = if (hasUnread) {
+                    Modifier.notificationDot(
+                        MaterialTheme.colorScheme.tertiary,
+                    )
+                } else {
+                    Modifier
+                },
                 selectedIcon = {
                     Icon(
                         imageVector = destination.selectedIcon,
@@ -270,9 +273,13 @@ private fun BottomBar(
                         contentDescription = null,
                     )
                 },
-                modifier = if (hasUnread) Modifier.notificationDot(
-                    MaterialTheme.colorScheme.tertiary
-                ) else Modifier,
+                modifier = if (hasUnread) {
+                    Modifier.notificationDot(
+                        MaterialTheme.colorScheme.tertiary,
+                    )
+                } else {
+                    Modifier
+                },
                 selectedIcon = {
                     Icon(
                         imageVector = destination.selectedIcon,
@@ -287,8 +294,8 @@ private fun BottomBar(
 
 @Suppress("MagicNumber")
 private fun Modifier.notificationDot(
-    color: Color
-): Modifier{
+    color: Color,
+): Modifier {
     return this then drawWithContent {
         drawContent()
         drawCircle(
@@ -298,11 +305,11 @@ private fun Modifier.notificationDot(
             // however, its parameters are private, so we must depend on them implicitly
             // (NavigationBarTokens.ActiveIndicatorWidth = 64.dp)
             center =
-                center +
-                        Offset(
-                            64.dp.toPx() * .45f,
-                            32.dp.toPx() * -.45f - 6.dp.toPx(),
-                        ),
+            center +
+                Offset(
+                    64.dp.toPx() * .45f,
+                    32.dp.toPx() * -.45f - 6.dp.toPx(),
+                ),
         )
     }
 }

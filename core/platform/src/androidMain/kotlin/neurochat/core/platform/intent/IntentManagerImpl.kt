@@ -44,6 +44,7 @@ class IntentManagerImpl(
     companion object {
         private const val IMAGE_QUALITY = 100
     }
+
     /**
      * Starts an Android activity with the provided intent.
      *

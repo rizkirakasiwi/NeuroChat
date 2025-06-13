@@ -1,90 +1,68 @@
 #!/bin/sh
 
-# Function to check the current branch
+# Check current branch
 check_current_branch() {
-    echo "\n🚀 Checking the current git branch..."
+    echo "\n🔍 Checking current Git branch..."
     CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
+
     if [ "$CURRENT_BRANCH" = "master" ] || [ "$CURRENT_BRANCH" = "dev" ]; then
-        echo "🛑 Hold it right there! Committing directly to the '$CURRENT_BRANCH' branch? That's a big no-no!"
-        echo "🚫 Direct commits to '$CURRENT_BRANCH' are like trying to use a wrench to write code—doesn't work! 😜"
-        echo "\nABORTING COMMIT: You must navigate to a feature branch or create a new one to save the day! 🦸‍♂️🦸‍♀️\n"
+        echo "❌ Commit blocked on '$CURRENT_BRANCH'. Use a feature branch instead."
         exit 1
-    else
-        echo "✅ Fantastic! You're on the '$CURRENT_BRANCH' branch, which is perfect for commits. Let's keep this awesome momentum going! 🚀✨"
     fi
+
+    echo "✅ On '$CURRENT_BRANCH'. Proceeding..."
 }
 
-# Function to run Spotless checks
+# Run Spotless
 run_spotless_checks() {
-    echo "\n🚀 Spotless is now analyzing and formatting your code!"
+    echo "\n🧹 Running Spotless format check..."
     ./gradlew spotlessApply --no-configuration-cache --daemon > /tmp/spotless-result
-    SPOTLESS_EXIT_CODE=$?
-
-    if [ ${SPOTLESS_EXIT_CODE} -ne 0 ]; then
+    if [ $? -ne 0 ]; then
         cat /tmp/spotless-result
         rm /tmp/spotless-result
-        echo "\n*********************************************************************************"
-        echo "   💥 Uh-oh! Spotless found formatting issues in the code! Time to tidy up! 💥"
-        echo "      💡 Tip: Check the reported issues and fix formatting errors. 🛠️"
-        echo "*********************************************************************************"
-        exit ${SPOTLESS_EXIT_CODE}
-    else
-        rm /tmp/spotless-result
-        echo "🎉 Stellar job! Your code is pristine and has passed Spotless's formatting checks without a hitch! Keep shining bright! ✨🚀"
+        echo "\n❌ Spotless found issues. Please fix them before committing."
+        exit 1
     fi
+    rm /tmp/spotless-result
+    echo "✅ Spotless formatting applied successfully."
 }
 
-# Function to run ktlint checks
+# Run Dependency Guard
 run_dependency_guard() {
-    printf "\n🚀 Brace yourself! We're about to generate dependency guard baseline!"
+    echo "\n📦 Generating dependency baseline..."
     ./gradlew dependencyGuardBaseline > /tmp/dependency-result
-    KT_EXIT_CODE=$?
-
-    if [ ${KT_EXIT_CODE} -ne 0 ]; then
+    if [ $? -ne 0 ]; then
         cat /tmp/dependency-result
         rm /tmp/dependency-result
-        printf "\n*********************************************************************************"
-        echo "     💥 Oh no! Something went wrong! 💥"
-        echo "     💡 Unable to generate dependency baseline. 🛠️"
-        printf "*********************************************************************************\n"
-        exit ${KT_EXIT_CODE}
-    else
-        rm /tmp/dependency-result
-        echo "🎉 Bravo! Dependency baseline has been generated successfully! Keep rocking that clean code! 🚀💫"
+        echo "\n❌ Failed to generate dependency baseline."
+        exit 1
     fi
+    rm /tmp/dependency-result
+    echo "✅ Dependency baseline generated successfully."
 }
 
-# Function to run Detekt checks
+# Run Detekt
 run_detekt_checks() {
-    echo "\n🚀 Detekt is now analyzing your Kotlin code for potential issues!"
+    echo "\n🔎 Running Detekt..."
     ./gradlew detekt > /tmp/detekt-result
-    DETEKT_EXIT_CODE=$?
-
-    if [ ${DETEKT_EXIT_CODE} -ne 0 ]; then
+    if [ $? -ne 0 ]; then
         cat /tmp/detekt-result
         rm /tmp/detekt-result
-        echo "\n*********************************************************************************"
-        echo "     💥 Oh no! Detekt found issues in the code! Time to fix those issues! 💥"
-        echo "     💡 Tip: Review the Detekt report to resolve these issues. 🛠️"
-        echo "*********************************************************************************"
-        exit ${DETEKT_EXIT_CODE}
-    else
-        rm /tmp/detekt-result
-        echo "🎉 Fantastic work! Your Kotlin code has sailed through Detekt's analysis with ease! Onward to greatness! 🚀🌟"
+        echo "\n❌ Detekt found issues. Please review and fix them."
+        exit 1
     fi
+    rm /tmp/detekt-result
+    echo "✅ Detekt check passed."
 }
 
-# Function to print success message
+# Success message
 print_success_message() {
     GIT_USERNAME=$(git config user.name)
-    echo "\n *******************************************************************************"
-    echo "🚀🎉 Huzzah, $GIT_USERNAME! Your code has triumphed through the Style Checker Dragon unscathed! 🐉"
-    echo "Your code shines brighter than a supernova and sparkles like a constellation of stars! ✨🌌"
-    echo "*******************************************************************************"
-    echo "\n🚀🎉 Hold tight, $GIT_USERNAME! Your code is ready to commit and conquer new heights! 🌟✨ Keep up the amazing work! 💪\n"
+    echo "\n🎉 All checks passed. Great job, $GIT_USERNAME!"
+    echo "🚀 Ready to commit and push your code."
 }
 
-# Main script execution
+# Main
 check_current_branch
 run_spotless_checks
 run_detekt_checks

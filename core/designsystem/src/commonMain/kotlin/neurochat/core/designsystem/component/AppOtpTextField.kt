@@ -46,9 +46,9 @@ fun AppOtpTextField(
     var isError by remember { mutableStateOf(false) }
     Column(
         modifier =
-            modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+        modifier
+            .fillMaxWidth()
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         BasicTextField(
@@ -66,21 +66,21 @@ fun AppOtpTextField(
                 }
             },
             keyboardActions =
-                KeyboardActions(
-                    onDone = {
-                        if (otpText != realOtp) {
-                            isError = true
-                        } else {
-                            onOtpTextCorrectlyEnter.invoke()
-                        }
-                        println("OTP: $otpText and $isError")
-                    },
-                ),
+            KeyboardActions(
+                onDone = {
+                    if (otpText != realOtp) {
+                        isError = true
+                    } else {
+                        onOtpTextCorrectlyEnter.invoke()
+                    }
+                    println("OTP: $otpText and $isError")
+                },
+            ),
             keyboardOptions =
-                KeyboardOptions.Default.copy(
-                    keyboardType = KeyboardType.Number,
-                    imeAction = ImeAction.Done,
-                ),
+            KeyboardOptions.Default.copy(
+                keyboardType = KeyboardType.Number,
+                imeAction = ImeAction.Done,
+            ),
             decorationBox = {
                 Row(horizontalArrangement = Arrangement.Center) {
                     repeat(otpCount) { index ->
@@ -121,17 +121,17 @@ private fun CharView(
         }
     Text(
         modifier =
-            modifier
-                .width(40.dp)
-                .wrapContentHeight(align = Alignment.CenterVertically),
+        modifier
+            .width(40.dp)
+            .wrapContentHeight(align = Alignment.CenterVertically),
         text = char,
         style = MaterialTheme.typography.headlineSmall,
         color =
-            if (isFocused) {
-                Color.DarkGray
-            } else {
-                Color.LightGray
-            },
+        if (isFocused) {
+            Color.DarkGray
+        } else {
+            Color.LightGray
+        },
         textAlign = TextAlign.Center,
     )
 }

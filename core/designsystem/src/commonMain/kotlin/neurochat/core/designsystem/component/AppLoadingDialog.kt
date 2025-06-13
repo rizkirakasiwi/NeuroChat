@@ -40,24 +40,24 @@ fun AppLoadingDialog(
             Dialog(
                 onDismissRequest = {},
                 properties =
-                    DialogProperties(
-                        dismissOnBackPress = false,
-                        dismissOnClickOutside = false,
-                    ),
+                DialogProperties(
+                    dismissOnBackPress = false,
+                    dismissOnClickOutside = false,
+                ),
             ) {
                 Card(
                     shape = RoundedCornerShape(28.dp),
                     colors =
-                        CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                        ),
+                    CardDefaults.cardColors(
+                        containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+                    ),
                     modifier =
-                        modifier
-                            .semantics {
-                                testTag = "AlertPopup"
-                            }
-                            .fillMaxWidth()
-                            .wrapContentHeight(),
+                    modifier
+                        .semantics {
+                            testTag = "AlertPopup"
+                        }
+                        .fillMaxWidth()
+                        .wrapContentHeight(),
                 ) {
                     Column(
                         modifier = Modifier.fillMaxWidth(),
@@ -67,21 +67,21 @@ fun AppLoadingDialog(
                         Text(
                             text = "Loading..",
                             modifier =
-                                Modifier
-                                    .testTag("AlertTitleText")
-                                    .padding(
-                                        top = 24.dp,
-                                        bottom = 8.dp,
-                                    ),
+                            Modifier
+                                .testTag("AlertTitleText")
+                                .padding(
+                                    top = 24.dp,
+                                    bottom = 8.dp,
+                                ),
                         )
                         CircularProgressIndicator(
                             modifier =
-                                Modifier
-                                    .testTag("AlertProgressIndicator")
-                                    .padding(
-                                        top = 8.dp,
-                                        bottom = 24.dp,
-                                    ),
+                            Modifier
+                                .testTag("AlertProgressIndicator")
+                                .padding(
+                                    top = 8.dp,
+                                    bottom = 24.dp,
+                                ),
                         )
                     }
                 }

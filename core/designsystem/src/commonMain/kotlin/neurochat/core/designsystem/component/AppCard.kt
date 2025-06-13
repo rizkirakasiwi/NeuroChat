@@ -31,13 +31,13 @@ fun AppCard(
     Card(
         shape = shape,
         modifier =
-            modifier
-                .fillMaxWidth()
-                .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
+        modifier
+            .fillMaxWidth()
+            .then(if (onClick != null) Modifier.clickable(onClick = onClick) else Modifier),
         elevation =
-            CardDefaults.cardElevation(
-                defaultElevation = elevation,
-            ),
+        CardDefaults.cardElevation(
+            defaultElevation = elevation,
+        ),
         colors = colors,
         content = content,
     )

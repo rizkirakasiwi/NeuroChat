@@ -37,9 +37,9 @@ fun AppTab(
         selectedContentColor = contentColorFor(selectedColor),
         unselectedContentColor = contentColorFor(unselectedColor),
         modifier =
-            modifier
-                .clip(RoundedCornerShape(25.dp))
-                .background(if (selected) selectedColor else unselectedColor)
-                .padding(horizontal = 20.dp),
+        modifier
+            .clip(RoundedCornerShape(25.dp))
+            .background(if (selected) selectedColor else unselectedColor)
+            .padding(horizontal = 20.dp),
     )
 }

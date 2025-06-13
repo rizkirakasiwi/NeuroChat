@@ -70,10 +70,10 @@ fun Modifier.onClick(
     onClick: () -> Unit,
 ) = this.composed(
     inspectorInfo =
-        debugInspectorInfo {
-            name = "onClickModifier"
-            value = enabled
-        },
+    debugInspectorInfo {
+        name = "onClickModifier"
+        value = enabled
+    },
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     clickable(
