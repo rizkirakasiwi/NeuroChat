@@ -3,7 +3,10 @@ package com.neuro.chat.convention
 import com.diffplug.gradle.spotless.SpotlessExtension
 import org.gradle.api.Project
 
-const val ktlintVersion = "1.0.1"
+/**
+ * Ktlint cli version
+ * */
+const val ktlintVersion = "1.6.0"
 
 /**
  * Configures the Spotless plugin with the [extension] configuration.
