@@ -28,6 +28,7 @@ import androidx.compose.material.icons.filled.FlashOff
 import androidx.compose.material.icons.filled.FlashOn
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.KeyboardArrowDown
+import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Photo
 import androidx.compose.material.icons.filled.PhotoLibrary
@@ -128,6 +129,7 @@ object AppIcons {
     val Scan = Icons.Outlined.QrCodeScanner
     val RadioButtonUnchecked = Icons.Default.RadioButtonUnchecked
     val RadioButtonChecked = Icons.Filled.RadioButtonChecked
+    val Menu = Icons.Default.Menu
 
 //    val Theme = Icons.Filled.WbSunny
     val Sun = Icons.Outlined.WbSunny
