@@ -6,22 +6,29 @@
  */
 package neurochat.core.designsystem.component
 
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.RowScope
-import androidx.compose.material3.Icon
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.material3.DrawerDefaults
+import androidx.compose.material3.DrawerState
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemColors
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
-import androidx.compose.material3.Text
+import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import neurochat.core.designsystem.icon.AppIcons
-import neurochat.core.designsystem.theme.AppTheme
-import org.jetbrains.compose.ui.tooling.preview.Preview
 
 /**
  * Now in Android navigation bar item with icon and label content slots. Wraps Material 3
@@ -140,92 +147,90 @@ fun AppNavigationRail(
     )
 }
 
-@Preview
+/**
+ * App navigation drawer with content slots. Wraps Material 3 [ModalNavigationDrawer].
+ *
+ * @param state The state of the drawer.
+ * @param modifier Modifier to be applied to the navigation drawer.
+ * @param drawerContent The content of the drawer.
+ * @param content The main content of the screen.
+ */
 @Composable
-private fun AppNavigationBarPreview() {
-    val items = listOf("Home", "Payments", "Finance", "Profile")
-    val icons =
-        listOf(
-            AppIcons.Home,
-            AppIcons.Payment,
-            AppIcons.Finance,
-            AppIcons.Profile,
-        )
-    val selectedIcons =
-        listOf(
-            AppIcons.HomeBoarder,
-            AppIcons.Payment,
-            AppIcons.Finance,
-            AppIcons.ProfileBoarder,
-        )
-
-    AppTheme {
-        AppNavigationBar {
-            items.forEachIndexed { index, item ->
-                AppNavigationBarItem(
-                    selected = index == 0,
-                    onClick = { },
-                    icon = {
-                        Icon(
-                            imageVector = icons[index],
-                            contentDescription = item,
-                        )
-                    },
-                    selectedIcon = {
-                        Icon(
-                            imageVector = selectedIcons[index],
-                            contentDescription = item,
-                        )
-                    },
-                    label = { Text(item) },
-                )
-            }
-        }
-    }
+fun AppNavigationDrawer(
+    state: DrawerState,
+    modifier: Modifier = Modifier,
+    drawerContent: @Composable () -> Unit = {},
+    content: @Composable () -> Unit,
+) {
+    ModalNavigationDrawer(
+        modifier = modifier,
+        drawerState = state,
+        content = content,
+        drawerContent = drawerContent,
+    )
 }
 
-@Preview
+/**
+ * Component that represents the sheet content of a [ModalNavigationDrawer].
+ * Wraps Material 3 [ModalDrawerSheet].
+ *
+ * @param modifier Modifier to be applied to the drawer sheet.
+ * @param drawerShape defines the shape of this drawer's container.
+ * @param drawerContainerColor the color used for the background of this drawer. Use
+ * `Color.Transparent` to have no color.
+ * @param drawerContentColor the preferred color for content inside this drawer. Defaults to either
+ * the matching content color for [drawerContainerColor], or to the current LocalContentColor if
+ * [drawerContainerColor] is not a color from the theme.
+ * @param drawerTonalElevation when [drawerContainerColor] is [ColorScheme.surface], a translucent
+ * primary color overlay is applied on top of the container. A higher tonal elevation value will
+ * result in a darker color in light theme and lighter color in dark theme. See also: [Surface].
+ * @param windowInsets a window insets of the drawer sheet.
+ * @param content The content of the drawer sheet.
+ */
 @Composable
-private fun AppNavigationRailPreview() {
-    val items = listOf("Home", "Payments", "Finance", "Profile")
-    val icons =
-        listOf(
-            AppIcons.Home,
-            AppIcons.Payment,
-            AppIcons.Finance,
-            AppIcons.Profile,
-        )
-    val selectedIcons =
-        listOf(
-            AppIcons.HomeBoarder,
-            AppIcons.Payment,
-            AppIcons.Finance,
-            AppIcons.ProfileBoarder,
-        )
+fun AppDrawerSheet(
+    modifier: Modifier = Modifier,
+    drawerShape: Shape = DrawerDefaults.shape,
+    drawerContainerColor: Color = DrawerDefaults.modalContainerColor,
+    drawerContentColor: Color = contentColorFor(drawerContainerColor),
+    drawerTonalElevation: Dp = DrawerDefaults.ModalDrawerElevation,
+    windowInsets: WindowInsets = DrawerDefaults.windowInsets,
+    content: @Composable ColumnScope.() -> Unit,
+) {
+    ModalDrawerSheet(
+        modifier = modifier,
+        drawerShape = drawerShape,
+        drawerContainerColor = drawerContainerColor,
+        drawerContentColor = drawerContentColor,
+        drawerTonalElevation = drawerTonalElevation,
+        windowInsets = windowInsets,
+        content = content,
+    )
+}
 
-    AppTheme {
-        AppNavigationRail {
-            items.forEachIndexed { index, item ->
-                AppNavigationRailItem(
-                    selected = index == 0,
-                    onClick = { },
-                    icon = {
-                        Icon(
-                            imageVector = icons[index],
-                            contentDescription = item,
-                        )
-                    },
-                    selectedIcon = {
-                        Icon(
-                            imageVector = selectedIcons[index],
-                            contentDescription = item,
-                        )
-                    },
-                    label = { Text(item) },
-                )
-            }
-        }
-    }
+@Composable
+fun AppDrawerItem(
+    label: @Composable () -> Unit,
+    selected: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    icon: (@Composable () -> Unit)? = null,
+    badge: (@Composable () -> Unit)? = null,
+    shape: Shape = MaterialTheme.shapes.small,
+    colors: NavigationDrawerItemColors = NavigationDrawerItemDefaults.colors(),
+    interactionSource: MutableInteractionSource? = null,
+) {
+    NavigationDrawerItem(
+        label = label,
+        selected = selected,
+        onClick = onClick,
+        modifier = modifier,
+        icon = icon,
+        badge = badge,
+        shape = shape,
+        colors = colors,
+        interactionSource = interactionSource,
+    )
 }
 
 /**
