@@ -2,7 +2,7 @@
 
 # Check current branch
 check_current_branch() {
-    echo "\n🔍 Checking current Git branch...\n"
+    echo "🔍 Checking current Git branch...\n"
     CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 
     if [ "$CURRENT_BRANCH" = "master" ] || [ "$CURRENT_BRANCH" = "dev" ]; then
@@ -15,12 +15,12 @@ check_current_branch() {
 
 # Run Spotless
 run_spotless_checks() {
-    echo "\n🧹 Running Spotless format check...\n"
+    echo "🧹 Running Spotless format check...\n"
     ./gradlew spotlessApply --no-configuration-cache --daemon > /tmp/spotless-result
     if [ $? -ne 0 ]; then
         cat /tmp/spotless-result
         rm /tmp/spotless-result
-        echo "\n❌ Spotless found issues. Please fix them before committing.\n"
+        echo "❌ Spotless found issues. Please fix them before committing.\n"
         exit 1
     fi
     rm /tmp/spotless-result
@@ -29,12 +29,12 @@ run_spotless_checks() {
 
 # Run Dependency Guard
 run_dependency_guard() {
-    echo "\n📦 Generating dependency baseline...\n"
+    echo "📦 Generating dependency baseline...\n"
     ./gradlew dependencyGuardBaseline > /tmp/dependency-result
     if [ $? -ne 0 ]; then
         cat /tmp/dependency-result
         rm /tmp/dependency-result
-        echo "\n❌ Failed to generate dependency baseline.\n"
+        echo "❌ Failed to generate dependency baseline.\n"
         exit 1
     fi
     rm /tmp/dependency-result
@@ -43,12 +43,12 @@ run_dependency_guard() {
 
 # Run Detekt
 run_detekt_checks() {
-    echo "\n🔎 Running Detekt..."
+    echo "🔎 Running Detekt...\n"
     ./gradlew detekt > /tmp/detekt-result
     if [ $? -ne 0 ]; then
         cat /tmp/detekt-result
         rm /tmp/detekt-result
-        echo "\n❌ Detekt found issues. Please review and fix them.\n"
+        echo "❌ Detekt found issues. Please review and fix them.\n"
         exit 1
     fi
     rm /tmp/detekt-result
@@ -58,7 +58,7 @@ run_detekt_checks() {
 # Success message
 print_success_message() {
     GIT_USERNAME=$(git config user.name)
-    echo "\n🎉 All checks passed. Great job, $GIT_USERNAME!\n"
+    echo "🎉 All checks passed. Great job, $GIT_USERNAME!\n"
     echo "🚀 Ready to commit and push your code."
 }
 
