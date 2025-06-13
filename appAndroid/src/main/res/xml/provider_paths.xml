@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright © 2025 NeuroChat. All rights reserved.
+
+     This software is proprietary and confidential. Unauthorized copying, modification,
+     distribution, or use of this software is strictly prohibited.
+
+-->
+<resources>
+    <paths>
+        <!-- Only share files in the subdirectory `shared` under internal files directory -->
+        <files-path
+            name="my_shared_files"
+            path="shared/" />
+
+        <!-- Only share cache images -->
+        <cache-path
+            name="shared_cache"
+            path="images/" />
+    </paths>
+</resources>
