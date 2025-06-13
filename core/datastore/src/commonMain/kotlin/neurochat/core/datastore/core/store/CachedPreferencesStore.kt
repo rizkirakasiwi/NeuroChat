@@ -67,30 +67,29 @@ class CachedPreferencesStore(
     override suspend fun <T> putValue(
         key: String,
         value: T,
-    ): Result<Unit> =
-        withContext(dispatcher) {
-            runCatching {
-                // Validate inputs
-                validator.validateKey(key).getOrThrow()
-                validator.validateValue(value).getOrThrow()
+    ): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            // Validate inputs
+            validator.validateKey(key).getOrThrow()
+            validator.validateValue(value).getOrThrow()
 
-                // Find and use type handler
-                val handler =
-                    findTypeHandler(value) ?: throw UnsupportedTypeException(
-                        "No handler found for type: ${value?.let { it::class.simpleName } ?: "null"}",
-                    )
+            // Find and use type handler
+            val handler =
+                findTypeHandler(value) ?: throw UnsupportedTypeException(
+                    "No handler found for type: ${value?.let { it::class.simpleName } ?: "null"}",
+                )
 
-                @Suppress("UNCHECKED_CAST")
-                val typedHandler = handler as TypeHandler<T>
-                val result = typedHandler.put(settings, key, value)
+            @Suppress("UNCHECKED_CAST")
+            val typedHandler = handler as TypeHandler<T>
+            val result = typedHandler.put(settings, key, value)
 
-                if (result.isSuccess) {
-                    cacheValue(key, value as Any)
-                }
-
-                result.getOrThrow()
+            if (result.isSuccess) {
+                cacheValue(key, value as Any)
             }
+
+            result.getOrThrow()
         }
+    }
 
     /**
      * Retrieves a value associated with the specified key from the data store.
@@ -107,32 +106,31 @@ class CachedPreferencesStore(
     override suspend fun <T> getValue(
         key: String,
         default: T,
-    ): Result<T> =
-        withContext(dispatcher) {
-            runCatching {
-                validator.validateKey(key).getOrThrow()
+    ): Result<T> = withContext(dispatcher) {
+        runCatching {
+            validator.validateKey(key).getOrThrow()
 
-                // Check cache first
-                getCachedValue<T>(key)?.let { return@runCatching it }
+            // Check cache first
+            getCachedValue<T>(key)?.let { return@runCatching it }
 
-                // Find and use type handler
-                val handler =
-                    findTypeHandler(default)
-                        ?: throw UnsupportedTypeException(
-                            "No handler found for type: ${default?.let { it::class.simpleName } ?: "null"}",
-                        )
+            // Find and use type handler
+            val handler =
+                findTypeHandler(default)
+                    ?: throw UnsupportedTypeException(
+                        "No handler found for type: ${default?.let { it::class.simpleName } ?: "null"}",
+                    )
 
-                @Suppress("UNCHECKED_CAST")
-                val typedHandler = handler as TypeHandler<T>
-                val result = typedHandler.get(settings, key, default)
+            @Suppress("UNCHECKED_CAST")
+            val typedHandler = handler as TypeHandler<T>
+            val result = typedHandler.get(settings, key, default)
 
-                if (result.isSuccess) {
-                    cacheValue(key, result.getOrThrow() as Any)
-                }
-
-                result.getOrThrow()
+            if (result.isSuccess) {
+                cacheValue(key, result.getOrThrow() as Any)
             }
+
+            result.getOrThrow()
         }
+    }
 
     /**
      * Stores a serializable value using the provided serializer.
@@ -151,25 +149,24 @@ class CachedPreferencesStore(
         key: String,
         value: T,
         serializer: KSerializer<T>,
-    ): Result<Unit> =
-        withContext(dispatcher) {
-            runCatching {
-                validator.validateKey(key).getOrThrow()
-                validator.validateValue(value).getOrThrow()
+    ): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            validator.validateKey(key).getOrThrow()
+            validator.validateValue(value).getOrThrow()
 
-                val serializedResult = serializationStrategy.serialize(value, serializer)
-                serializedResult.fold(
-                    onSuccess = { serializedData ->
-                        val result = runCatching { settings.putString(key, serializedData) }
-                        if (result.isSuccess) {
-                            cacheValue(key, value as Any)
-                        }
-                        result.getOrThrow()
-                    },
-                    onFailure = { throw it },
-                )
-            }
+            val serializedResult = serializationStrategy.serialize(value, serializer)
+            serializedResult.fold(
+                onSuccess = { serializedData ->
+                    val result = runCatching { settings.putString(key, serializedData) }
+                    if (result.isSuccess) {
+                        cacheValue(key, value as Any)
+                    }
+                    result.getOrThrow()
+                },
+                onFailure = { throw it },
+            )
         }
+    }
 
     /**
      * Retrieves a serializable value using the provided serializer.
@@ -188,39 +185,38 @@ class CachedPreferencesStore(
         key: String,
         default: T,
         serializer: KSerializer<T>,
-    ): Result<T> =
-        withContext(dispatcher) {
-            runCatching {
-                validator.validateKey(key).getOrThrow()
+    ): Result<T> = withContext(dispatcher) {
+        runCatching {
+            validator.validateKey(key).getOrThrow()
 
-                // Check cache first
-                getCachedValue<T>(key)?.let { return@runCatching it }
+            // Check cache first
+            getCachedValue<T>(key)?.let { return@runCatching it }
 
-                if (!settings.hasKey(key)) {
-                    cacheValue(key, default as Any)
-                    return@runCatching default
-                }
-
-                val serializedData =
-                    runCatching { settings.getString(key, "") }
-                        .getOrElse { throw it }
-
-                if (serializedData.isEmpty()) {
-                    return@runCatching default
-                }
-
-                serializationStrategy.deserialize(serializedData, serializer).fold(
-                    onSuccess = { value ->
-                        cacheValue(key, value as Any)
-                        value
-                    },
-                    onFailure = {
-                        // Return default on deserialization failure but don't cache it
-                        default
-                    },
-                )
+            if (!settings.hasKey(key)) {
+                cacheValue(key, default as Any)
+                return@runCatching default
             }
+
+            val serializedData =
+                runCatching { settings.getString(key, "") }
+                    .getOrElse { throw it }
+
+            if (serializedData.isEmpty()) {
+                return@runCatching default
+            }
+
+            serializationStrategy.deserialize(serializedData, serializer).fold(
+                onSuccess = { value ->
+                    cacheValue(key, value as Any)
+                    value
+                },
+                onFailure = {
+                    // Return default on deserialization failure but don't cache it
+                    default
+                },
+            )
         }
+    }
 
     /**
      * Checks if the specified key exists in the data store or cache.
@@ -233,13 +229,12 @@ class CachedPreferencesStore(
      * store.hasKey("theme")
      * ```
      */
-    override suspend fun hasKey(key: String): Result<Boolean> =
-        withContext(dispatcher) {
-            runCatching {
-                validator.validateKey(key).getOrThrow()
-                settings.hasKey(key) || cacheManager.containsKey(key)
-            }
+    override suspend fun hasKey(key: String): Result<Boolean> = withContext(dispatcher) {
+        runCatching {
+            validator.validateKey(key).getOrThrow()
+            settings.hasKey(key) || cacheManager.containsKey(key)
         }
+    }
 
     /**
      * Removes the value associated with the specified key from the data store and cache.
@@ -252,15 +247,14 @@ class CachedPreferencesStore(
      * store.removeValue("theme")
      * ```
      */
-    override suspend fun removeValue(key: String): Result<Unit> =
-        withContext(dispatcher) {
-            runCatching {
-                validator.validateKey(key).getOrThrow()
-                settings.remove(key)
-                cacheManager.remove(key)
-                Unit
-            }
+    override suspend fun removeValue(key: String): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            validator.validateKey(key).getOrThrow()
+            settings.remove(key)
+            cacheManager.remove(key)
+            Unit
         }
+    }
 
     /**
      * Clears all stored preferences in the data store and cache.
@@ -272,13 +266,12 @@ class CachedPreferencesStore(
      * store.clearAll()
      * ```
      */
-    override suspend fun clearAll(): Result<Unit> =
-        withContext(dispatcher) {
-            runCatching {
-                settings.clear()
-                cacheManager.clear()
-            }
+    override suspend fun clearAll(): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            settings.clear()
+            cacheManager.clear()
         }
+    }
 
     /**
      * Retrieves all keys currently stored in the data store.
@@ -290,10 +283,9 @@ class CachedPreferencesStore(
      * store.getAllKeys()
      * ```
      */
-    override suspend fun getAllKeys(): Result<Set<String>> =
-        withContext(dispatcher) {
-            runCatching { settings.keys }
-        }
+    override suspend fun getAllKeys(): Result<Set<String>> = withContext(dispatcher) {
+        runCatching { settings.keys }
+    }
 
     /**
      * Retrieves the total number of key-value pairs stored in the data store.
@@ -305,10 +297,9 @@ class CachedPreferencesStore(
      * store.getSize()
      * ```
      */
-    override suspend fun getSize(): Result<Int> =
-        withContext(dispatcher) {
-            runCatching { settings.size }
-        }
+    override suspend fun getSize(): Result<Int> = withContext(dispatcher) {
+        runCatching { settings.size }
+    }
 
     /**
      * Invalidates the cache for the specified key.
@@ -321,14 +312,13 @@ class CachedPreferencesStore(
      * store.invalidateCache("theme")
      * ```
      */
-    override suspend fun invalidateCache(key: String): Result<Unit> =
-        withContext(dispatcher) {
-            runCatching {
-                validator.validateKey(key).getOrThrow()
-                cacheManager.remove(key)
-                Unit
-            }
+    override suspend fun invalidateCache(key: String): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            validator.validateKey(key).getOrThrow()
+            cacheManager.remove(key)
+            Unit
         }
+    }
 
     /**
      * Invalidates all cache entries in the data store.
@@ -340,12 +330,11 @@ class CachedPreferencesStore(
      * store.invalidateAllCache()
      * ```
      */
-    override suspend fun invalidateAllCache(): Result<Unit> =
-        withContext(dispatcher) {
-            runCatching {
-                cacheManager.clear()
-            }
+    override suspend fun invalidateAllCache(): Result<Unit> = withContext(dispatcher) {
+        runCatching {
+            cacheManager.clear()
         }
+    }
 
     /**
      * Returns the current size of the cache.
@@ -360,18 +349,14 @@ class CachedPreferencesStore(
     override fun getCacheSize(): Int = cacheManager.size()
 
     // Private helper methods to reduce duplication
-    private fun findTypeHandler(value: Any?): TypeHandler<Any>? {
-        return typeHandlers.find { it.canHandle(value) }
-    }
+    private fun findTypeHandler(value: Any?): TypeHandler<Any>? = typeHandlers.find { it.canHandle(value) }
 
     @Suppress("UNCHECKED_CAST")
-    private fun <T> getCachedValue(key: String): T? {
-        return try {
-            cacheManager.get(key) as? T
-        } catch (_: Exception) {
-            // Log cache retrieval error but don't fail the operation
-            null
-        }
+    private fun <T> getCachedValue(key: String): T? = try {
+        cacheManager.get(key) as? T
+    } catch (_: Exception) {
+        // Log cache retrieval error but don't fail the operation
+        null
     }
 
     private fun cacheValue(

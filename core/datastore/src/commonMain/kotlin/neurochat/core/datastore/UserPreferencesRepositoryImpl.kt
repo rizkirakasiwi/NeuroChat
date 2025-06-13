@@ -54,75 +54,51 @@ class UserPreferencesRepositoryImpl(
         }.distinctUntilChanged()
 
     // Theme Brand Operations
-    override suspend fun setThemeBrand(themeBrand: ThemeBrand): Result<Unit> {
-        return preferencesStore.savePreference(THEME_BRAND_KEY, themeBrand.brandName)
-    }
+    override suspend fun setThemeBrand(themeBrand: ThemeBrand): Result<Unit> = preferencesStore.savePreference(THEME_BRAND_KEY, themeBrand.brandName)
 
-    override suspend fun getThemeBrand(): Result<ThemeBrand> {
-        return preferencesStore.getPreference(THEME_BRAND_KEY, DEFAULT_THEME_BRAND.brandName)
-            .map { brandName -> ThemeBrand.fromString(brandName) }
-    }
+    override suspend fun getThemeBrand(): Result<ThemeBrand> = preferencesStore.getPreference(THEME_BRAND_KEY, DEFAULT_THEME_BRAND.brandName)
+        .map { brandName -> ThemeBrand.fromString(brandName) }
 
-    override fun observeThemeBrand(): Flow<ThemeBrand> {
-        return preferencesStore.observePreference(THEME_BRAND_KEY, DEFAULT_THEME_BRAND.brandName)
-            .map { brandName -> ThemeBrand.fromString(brandName) }
-    }
+    override fun observeThemeBrand(): Flow<ThemeBrand> = preferencesStore.observePreference(THEME_BRAND_KEY, DEFAULT_THEME_BRAND.brandName)
+        .map { brandName -> ThemeBrand.fromString(brandName) }
 
     // Dark Theme Configuration Operations
-    override suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig): Result<Unit> {
-        return preferencesStore.savePreference(DARK_THEME_CONFIG_KEY, darkThemeConfig.name)
-    }
+    override suspend fun setDarkThemeConfig(darkThemeConfig: DarkThemeConfig): Result<Unit> = preferencesStore.savePreference(DARK_THEME_CONFIG_KEY, darkThemeConfig.name)
 
-    override suspend fun getDarkThemeConfig(): Result<DarkThemeConfig> {
-        return preferencesStore.getPreference(DARK_THEME_CONFIG_KEY, DEFAULT_DARK_THEME_CONFIG.name)
-            .map { configName -> DarkThemeConfig.fromString(configName) }
-    }
+    override suspend fun getDarkThemeConfig(): Result<DarkThemeConfig> = preferencesStore.getPreference(DARK_THEME_CONFIG_KEY, DEFAULT_DARK_THEME_CONFIG.name)
+        .map { configName -> DarkThemeConfig.fromString(configName) }
 
-    override fun observeDarkThemeConfig(): Flow<DarkThemeConfig> {
-        return preferencesStore.observePreference(
-            DARK_THEME_CONFIG_KEY,
-            DEFAULT_DARK_THEME_CONFIG.name,
-        )
-            .map { configName -> DarkThemeConfig.fromString(configName) }
-    }
+    override fun observeDarkThemeConfig(): Flow<DarkThemeConfig> = preferencesStore.observePreference(
+        DARK_THEME_CONFIG_KEY,
+        DEFAULT_DARK_THEME_CONFIG.name,
+    )
+        .map { configName -> DarkThemeConfig.fromString(configName) }
 
     // Dynamic Color Preference Operations
-    override suspend fun setDynamicColorPreference(useDynamicColor: Boolean): Result<Unit> {
-        return preferencesStore.savePreference(DYNAMIC_COLOR_KEY, useDynamicColor)
-    }
+    override suspend fun setDynamicColorPreference(useDynamicColor: Boolean): Result<Unit> = preferencesStore.savePreference(DYNAMIC_COLOR_KEY, useDynamicColor)
 
-    override suspend fun getDynamicColorPreference(): Result<Boolean> {
-        return preferencesStore.getPreference(DYNAMIC_COLOR_KEY, DEFAULT_DYNAMIC_COLOR)
-    }
+    override suspend fun getDynamicColorPreference(): Result<Boolean> = preferencesStore.getPreference(DYNAMIC_COLOR_KEY, DEFAULT_DYNAMIC_COLOR)
 
-    override fun observeDynamicColorPreference(): Flow<Boolean> {
-        return preferencesStore.observePreference(DYNAMIC_COLOR_KEY, DEFAULT_DYNAMIC_COLOR)
-    }
+    override fun observeDynamicColorPreference(): Flow<Boolean> = preferencesStore.observePreference(DYNAMIC_COLOR_KEY, DEFAULT_DYNAMIC_COLOR)
 
     // Batch Operations
-    override suspend fun resetToDefaults(): Result<Unit> {
-        return runCatching {
-            setThemeBrand(DEFAULT_THEME_BRAND).getOrThrow()
-            setDarkThemeConfig(DEFAULT_DARK_THEME_CONFIG).getOrThrow()
-            setDynamicColorPreference(DEFAULT_DYNAMIC_COLOR).getOrThrow()
-        }
+    override suspend fun resetToDefaults(): Result<Unit> = runCatching {
+        setThemeBrand(DEFAULT_THEME_BRAND).getOrThrow()
+        setDarkThemeConfig(DEFAULT_DARK_THEME_CONFIG).getOrThrow()
+        setDynamicColorPreference(DEFAULT_DYNAMIC_COLOR).getOrThrow()
     }
 
-    override suspend fun exportPreferences(): Result<UserData> {
-        return runCatching {
-            UserData(
-                themeBrand = getThemeBrand().getOrThrow(),
-                darkThemeConfig = getDarkThemeConfig().getOrThrow(),
-                useDynamicColor = getDynamicColorPreference().getOrThrow(),
-            )
-        }
+    override suspend fun exportPreferences(): Result<UserData> = runCatching {
+        UserData(
+            themeBrand = getThemeBrand().getOrThrow(),
+            darkThemeConfig = getDarkThemeConfig().getOrThrow(),
+            useDynamicColor = getDynamicColorPreference().getOrThrow(),
+        )
     }
 
-    override suspend fun importPreferences(userData: UserData): Result<Unit> {
-        return runCatching {
-            setThemeBrand(userData.themeBrand).getOrThrow()
-            setDarkThemeConfig(userData.darkThemeConfig).getOrThrow()
-            setDynamicColorPreference(userData.useDynamicColor).getOrThrow()
-        }
+    override suspend fun importPreferences(userData: UserData): Result<Unit> = runCatching {
+        setThemeBrand(userData.themeBrand).getOrThrow()
+        setDarkThemeConfig(userData.darkThemeConfig).getOrThrow()
+        setDynamicColorPreference(userData.useDynamicColor).getOrThrow()
     }
 }

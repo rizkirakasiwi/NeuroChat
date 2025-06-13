@@ -242,23 +242,21 @@ class IntentManagerImpl(
     private suspend fun saveImage(
         image: Bitmap,
         context: Context,
-    ): Uri? {
-        return withContext(Dispatchers.IO) {
-            try {
-                val imagesFolder = File(context.cacheDir, "images")
-                imagesFolder.mkdirs()
-                val file = File(imagesFolder, "shared_image.png")
+    ): Uri? = withContext(Dispatchers.IO) {
+        try {
+            val imagesFolder = File(context.cacheDir, "images")
+            imagesFolder.mkdirs()
+            val file = File(imagesFolder, "shared_image.png")
 
-                val stream = FileOutputStream(file)
-                image.compress(Bitmap.CompressFormat.PNG, IMAGE_QUALITY, stream)
-                stream.flush()
-                stream.close()
+            val stream = FileOutputStream(file)
+            image.compress(Bitmap.CompressFormat.PNG, IMAGE_QUALITY, stream)
+            stream.flush()
+            stream.close()
 
-                FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
-            } catch (e: IOException) {
-                Log.d("saving bitmap", "saving bitmap error ${e.message}")
-                null
-            }
+            FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
+        } catch (e: IOException) {
+            Log.d("saving bitmap", "saving bitmap error ${e.message}")
+            null
         }
     }
 
@@ -272,17 +270,15 @@ class IntentManagerImpl(
      * @param fileName The suggested name for the document to be created
      * @return An Android Intent configured for document creation
      */
-    override fun createDocumentIntent(fileName: String): Any {
-        return Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-            // Attempt to get the MIME type from the file extension
-            val extension = MimeTypeMap.getFileExtensionFromUrl(fileName)
-            type = extension?.let {
-                MimeTypeMap.getSingleton().getMimeTypeFromExtension(it)
-            } ?: "*/*"
+    override fun createDocumentIntent(fileName: String): Any = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
+        // Attempt to get the MIME type from the file extension
+        val extension = MimeTypeMap.getFileExtensionFromUrl(fileName)
+        type = extension?.let {
+            MimeTypeMap.getSingleton().getMimeTypeFromExtension(it)
+        } ?: "*/*"
 
-            addCategory(Intent.CATEGORY_OPENABLE)
-            putExtra(Intent.EXTRA_TITLE, fileName)
-        }
+        addCategory(Intent.CATEGORY_OPENABLE)
+        putExtra(Intent.EXTRA_TITLE, fileName)
     }
 
     /**

@@ -171,11 +171,10 @@ fun rememberAppPullToRefreshState(
     isEnabled: Boolean = false,
     isRefreshing: Boolean = false,
     onRefresh: () -> Unit = { },
-): AppPullToRefreshState =
-    remember(isEnabled, isRefreshing, onRefresh) {
-        AppPullToRefreshState(
-            isEnabled = isEnabled,
-            isRefreshing = isRefreshing,
-            onRefresh = onRefresh,
-        )
-    }
+): AppPullToRefreshState = remember(isEnabled, isRefreshing, onRefresh) {
+    AppPullToRefreshState(
+        isEnabled = isEnabled,
+        isRefreshing = isRefreshing,
+        onRefresh = onRefresh,
+    )
+}

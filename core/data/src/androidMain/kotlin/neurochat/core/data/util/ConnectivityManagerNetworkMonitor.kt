@@ -70,8 +70,7 @@ internal class ConnectivityManagerNetworkMonitor(
             .flowOn(ioDispatcher)
             .conflate()
 
-    private fun ConnectivityManager.isCurrentlyConnected() =
-        activeNetwork
-            ?.let(::getNetworkCapabilities)
-            ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
+    private fun ConnectivityManager.isCurrentlyConnected() = activeNetwork
+        ?.let(::getNetworkCapabilities)
+        ?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) ?: false
 }

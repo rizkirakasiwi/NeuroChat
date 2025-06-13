@@ -90,29 +90,27 @@ class ReactiveUserPreferencesDataStore(
     override suspend fun <T> putValue(
         key: String,
         value: T,
-    ): Result<Unit> {
-        return withContext(dispatcher) {
-            val oldValue =
-                if (hasKey(key).getOrDefault(false)) {
-                    enhancedDataStore.getValue(key, value).getOrNull()
-                } else {
-                    null
-                }
-
-            val result = enhancedDataStore.putValue(key, value)
-
-            if (result.isSuccess) {
-                val change =
-                    if (oldValue != null) {
-                        DataStoreChangeEvent.ValueUpdated(key, oldValue, value)
-                    } else {
-                        DataStoreChangeEvent.ValueAdded(key, value)
-                    }
-                changeNotifier.notifyChange(change)
+    ): Result<Unit> = withContext(dispatcher) {
+        val oldValue =
+            if (hasKey(key).getOrDefault(false)) {
+                enhancedDataStore.getValue(key, value).getOrNull()
+            } else {
+                null
             }
 
-            result
+        val result = enhancedDataStore.putValue(key, value)
+
+        if (result.isSuccess) {
+            val change =
+                if (oldValue != null) {
+                    DataStoreChangeEvent.ValueUpdated(key, oldValue, value)
+                } else {
+                    DataStoreChangeEvent.ValueAdded(key, value)
+                }
+            changeNotifier.notifyChange(change)
         }
+
+        result
     }
 
     /**
@@ -130,9 +128,7 @@ class ReactiveUserPreferencesDataStore(
     override suspend fun <T> getValue(
         key: String,
         default: T,
-    ): Result<T> {
-        return enhancedDataStore.getValue(key, default)
-    }
+    ): Result<T> = enhancedDataStore.getValue(key, default)
 
     /**
      * Stores a serializable value using the provided serializer.
@@ -151,29 +147,27 @@ class ReactiveUserPreferencesDataStore(
         key: String,
         value: T,
         serializer: KSerializer<T>,
-    ): Result<Unit> {
-        return withContext(dispatcher) {
-            val oldValue =
-                if (hasKey(key).getOrDefault(false)) {
-                    enhancedDataStore.getSerializableValue(key, value, serializer).getOrNull()
-                } else {
-                    null
-                }
-
-            val result = enhancedDataStore.putSerializableValue(key, value, serializer)
-
-            if (result.isSuccess) {
-                val change =
-                    if (oldValue != null) {
-                        DataStoreChangeEvent.ValueUpdated(key, oldValue, value)
-                    } else {
-                        DataStoreChangeEvent.ValueAdded(key, value)
-                    }
-                changeNotifier.notifyChange(change)
+    ): Result<Unit> = withContext(dispatcher) {
+        val oldValue =
+            if (hasKey(key).getOrDefault(false)) {
+                enhancedDataStore.getSerializableValue(key, value, serializer).getOrNull()
+            } else {
+                null
             }
 
-            result
+        val result = enhancedDataStore.putSerializableValue(key, value, serializer)
+
+        if (result.isSuccess) {
+            val change =
+                if (oldValue != null) {
+                    DataStoreChangeEvent.ValueUpdated(key, oldValue, value)
+                } else {
+                    DataStoreChangeEvent.ValueAdded(key, value)
+                }
+            changeNotifier.notifyChange(change)
         }
+
+        result
     }
 
     /**
@@ -193,9 +187,7 @@ class ReactiveUserPreferencesDataStore(
         key: String,
         default: T,
         serializer: KSerializer<T>,
-    ): Result<T> {
-        return enhancedDataStore.getSerializableValue(key, default, serializer)
-    }
+    ): Result<T> = enhancedDataStore.getSerializableValue(key, default, serializer)
 
     /**
      * Removes the value associated with the specified key from the data store.
@@ -208,25 +200,23 @@ class ReactiveUserPreferencesDataStore(
      * dataStore.removeValue("theme")
      * ```
      */
-    override suspend fun removeValue(key: String): Result<Unit> {
-        return withContext(dispatcher) {
-            val oldValue =
-                if (hasKey(key).getOrDefault(false)) {
-                    runCatching { settings.getString(key, "") }.getOrNull()
-                } else {
-                    null
-                }
-
-            val result = enhancedDataStore.removeValue(key)
-
-            if (result.isSuccess) {
-                changeNotifier.notifyChange(
-                    DataStoreChangeEvent.ValueRemoved(key, oldValue),
-                )
+    override suspend fun removeValue(key: String): Result<Unit> = withContext(dispatcher) {
+        val oldValue =
+            if (hasKey(key).getOrDefault(false)) {
+                runCatching { settings.getString(key, "") }.getOrNull()
+            } else {
+                null
             }
 
-            result
+        val result = enhancedDataStore.removeValue(key)
+
+        if (result.isSuccess) {
+            changeNotifier.notifyChange(
+                DataStoreChangeEvent.ValueRemoved(key, oldValue),
+            )
         }
+
+        result
     }
 
     /**
@@ -239,16 +229,14 @@ class ReactiveUserPreferencesDataStore(
      * dataStore.clearAll()
      * ```
      */
-    override suspend fun clearAll(): Result<Unit> {
-        return withContext(dispatcher) {
-            val result = enhancedDataStore.clearAll()
+    override suspend fun clearAll(): Result<Unit> = withContext(dispatcher) {
+        val result = enhancedDataStore.clearAll()
 
-            if (result.isSuccess) {
-                changeNotifier.notifyChange(DataStoreChangeEvent.StoreCleared())
-            }
-
-            result
+        if (result.isSuccess) {
+            changeNotifier.notifyChange(DataStoreChangeEvent.StoreCleared())
         }
+
+        result
     }
 
     /**
@@ -266,10 +254,8 @@ class ReactiveUserPreferencesDataStore(
     override fun <T> observeValue(
         key: String,
         default: T,
-    ): Flow<T> {
-        return valueObserver.createDistinctValueFlow(key, default) {
-            enhancedDataStore.getValue(key, default)
-        }
+    ): Flow<T> = valueObserver.createDistinctValueFlow(key, default) {
+        enhancedDataStore.getValue(key, default)
     }
 
     /**
@@ -291,10 +277,8 @@ class ReactiveUserPreferencesDataStore(
         key: String,
         default: T,
         serializer: KSerializer<T>,
-    ): Flow<T> {
-        return valueObserver.createDistinctValueFlow(key, default) {
-            enhancedDataStore.getSerializableValue(key, default, serializer)
-        }
+    ): Flow<T> = valueObserver.createDistinctValueFlow(key, default) {
+        enhancedDataStore.getSerializableValue(key, default, serializer)
     }
 
     /**
@@ -307,11 +291,9 @@ class ReactiveUserPreferencesDataStore(
      * dataStore.observeKeys().collect { keys -> println(keys) }
      * ```
      */
-    override fun observeKeys(): Flow<Set<String>> {
-        return changeNotifier.observeChanges()
-            .onStart { emit(DataStoreChangeEvent.ValueAdded("", null)) } // Trigger initial emission
-            .map { settings.keys }
-    }
+    override fun observeKeys(): Flow<Set<String>> = changeNotifier.observeChanges()
+        .onStart { emit(DataStoreChangeEvent.ValueAdded("", null)) } // Trigger initial emission
+        .map { settings.keys }
 
     /**
      * Observes the size of the data store as a flow, emitting updates as they occur.
@@ -323,12 +305,10 @@ class ReactiveUserPreferencesDataStore(
      * dataStore.observeSize().collect { size -> println(size) }
      * ```
      */
-    override fun observeSize(): Flow<Int> {
-        return changeNotifier.observeChanges()
-            .onStart { emit(DataStoreChangeEvent.ValueAdded("", null)) } // Trigger initial emission
-            .map { getSize().getOrDefault(0) }
-            .distinctUntilChanged()
-    }
+    override fun observeSize(): Flow<Int> = changeNotifier.observeChanges()
+        .onStart { emit(DataStoreChangeEvent.ValueAdded("", null)) } // Trigger initial emission
+        .map { getSize().getOrDefault(0) }
+        .distinctUntilChanged()
 
     /**
      * Observes all change events in the data store as a flow.
@@ -340,9 +320,7 @@ class ReactiveUserPreferencesDataStore(
      * dataStore.observeChanges().collect { event -> println(event) }
      * ```
      */
-    override fun observeChanges(): Flow<DataStoreChangeEvent> {
-        return changeNotifier.observeChanges()
-    }
+    override fun observeChanges(): Flow<DataStoreChangeEvent> = changeNotifier.observeChanges()
 
     /**
      * Checks if the specified key exists in the data store.

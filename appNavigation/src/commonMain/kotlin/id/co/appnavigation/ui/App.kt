@@ -295,26 +295,23 @@ private fun BottomBar(
 @Suppress("MagicNumber")
 private fun Modifier.notificationDot(
     color: Color,
-): Modifier {
-    return this then drawWithContent {
-        drawContent()
-        drawCircle(
-            color,
-            radius = 5.dp.toPx(),
-            // This is based on the dimensions of the NavigationBar's "indicator pill";
-            // however, its parameters are private, so we must depend on them implicitly
-            // (NavigationBarTokens.ActiveIndicatorWidth = 64.dp)
-            center =
-            center +
-                Offset(
-                    64.dp.toPx() * .45f,
-                    32.dp.toPx() * -.45f - 6.dp.toPx(),
-                ),
-        )
-    }
+): Modifier = this then drawWithContent {
+    drawContent()
+    drawCircle(
+        color,
+        radius = 5.dp.toPx(),
+        // This is based on the dimensions of the NavigationBar's "indicator pill";
+        // however, its parameters are private, so we must depend on them implicitly
+        // (NavigationBarTokens.ActiveIndicatorWidth = 64.dp)
+        center =
+        center +
+            Offset(
+                64.dp.toPx() * .45f,
+                32.dp.toPx() * -.45f - 6.dp.toPx(),
+            ),
+    )
 }
 
-private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) =
-    this?.hierarchy?.any {
-        it.route?.contains(destination.name, true) == true
-    } == true
+private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) = this?.hierarchy?.any {
+    it.route?.contains(destination.name, true) == true
+} == true

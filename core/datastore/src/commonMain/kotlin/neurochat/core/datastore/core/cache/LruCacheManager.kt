@@ -64,12 +64,10 @@ class LruCacheManager<K, V>(
      * @return The value associated with the key, or null if the key is not present.
      * @throws CacheException if the operation fails.
      */
-    override fun get(key: K): V? {
-        return try {
-            cache[key]
-        } catch (e: Exception) {
-            throw CacheException("Failed to get value from cache for key: $key", e)
-        }
+    override fun get(key: K): V? = try {
+        cache[key]
+    } catch (e: Exception) {
+        throw CacheException("Failed to get value from cache for key: $key", e)
     }
 
     /**
@@ -79,12 +77,10 @@ class LruCacheManager<K, V>(
      * @return The value that was associated with the key, or null if the key was not present.
      * @throws CacheException if the operation fails.
      */
-    override fun remove(key: K): V? {
-        return try {
-            cache.remove(key)
-        } catch (e: Exception) {
-            throw CacheException("Failed to remove value from cache for key: $key", e)
-        }
+    override fun remove(key: K): V? = try {
+        cache.remove(key)
+    } catch (e: Exception) {
+        throw CacheException("Failed to remove value from cache for key: $key", e)
     }
 
     /**
@@ -106,12 +102,10 @@ class LruCacheManager<K, V>(
      * @return The number of key-value pairs currently stored in the cache.
      * @throws CacheException if the operation fails.
      */
-    override fun size(): Int {
-        return try {
-            cache.size
-        } catch (e: Exception) {
-            throw CacheException("Failed to get cache size", e)
-        }
+    override fun size(): Int = try {
+        cache.size
+    } catch (e: Exception) {
+        throw CacheException("Failed to get cache size", e)
     }
 
     /**
@@ -121,11 +115,9 @@ class LruCacheManager<K, V>(
      * @return true if the cache contains an entry for the key, false otherwise.
      * @throws CacheException if the operation fails.
      */
-    override fun containsKey(key: K): Boolean {
-        return try {
-            cache.containsKey(key)
-        } catch (e: Exception) {
-            throw CacheException("Failed to check if cache contains key: $key", e)
-        }
+    override fun containsKey(key: K): Boolean = try {
+        cache.containsKey(key)
+    } catch (e: Exception) {
+        throw CacheException("Failed to check if cache contains key: $key", e)
     }
 }

@@ -12,8 +12,6 @@ enum class ThemeBrand(val brandName: String) {
     ;
 
     companion object {
-        fun fromString(value: String): ThemeBrand {
-            return entries.find { it.brandName.equals(value, ignoreCase = true) } ?: DEFAULT
-        }
+        fun fromString(value: String): ThemeBrand = entries.find { it.brandName.equals(value, ignoreCase = true) } ?: DEFAULT
     }
 }

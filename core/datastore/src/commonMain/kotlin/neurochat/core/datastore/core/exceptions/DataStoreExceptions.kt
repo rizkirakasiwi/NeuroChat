@@ -17,8 +17,7 @@ package neurochat.core.datastore.core.exceptions
  * throw PreferencesException("Something went wrong")
  * ```
  */
-sealed class PreferencesException(message: String, cause: Throwable? = null) :
-    Exception(message, cause)
+sealed class PreferencesException(message: String, cause: Throwable? = null) : Exception(message, cause)
 
 /**
  * Thrown when an invalid key is used in the data store.
@@ -43,8 +42,7 @@ class InvalidKeyException(key: String) : PreferencesException("Invalid key: $key
  * throw SerializationException("Failed to serialize value")
  * ```
  */
-class SerializationException(message: String, cause: Throwable? = null) :
-    PreferencesException("Serialization failed: $message", cause)
+class SerializationException(message: String, cause: Throwable? = null) : PreferencesException("Serialization failed: $message", cause)
 
 /**
  * Thrown when deserialization of a value fails.
@@ -57,8 +55,7 @@ class SerializationException(message: String, cause: Throwable? = null) :
  * throw DeserializationException("Failed to deserialize value")
  * ```
  */
-class DeserializationException(message: String, cause: Throwable? = null) :
-    PreferencesException("Deserialization failed: $message", cause)
+class DeserializationException(message: String, cause: Throwable? = null) : PreferencesException("Deserialization failed: $message", cause)
 
 /**
  * Thrown when an unsupported type is used in the data store.
@@ -70,8 +67,7 @@ class DeserializationException(message: String, cause: Throwable? = null) :
  * throw UnsupportedTypeException("CustomType")
  * ```
  */
-class UnsupportedTypeException(type: String) :
-    PreferencesException("Unsupported type: $type")
+class UnsupportedTypeException(type: String) : PreferencesException("Unsupported type: $type")
 
 /**
  * Thrown when a cache operation fails in the data store.
@@ -84,5 +80,4 @@ class UnsupportedTypeException(type: String) :
  * throw CacheException("Failed to cache value")
  * ```
  */
-class CacheException(message: String, cause: Throwable? = null) :
-    PreferencesException("Cache operation failed: $message", cause)
+class CacheException(message: String, cause: Throwable? = null) : PreferencesException("Cache operation failed: $message", cause)

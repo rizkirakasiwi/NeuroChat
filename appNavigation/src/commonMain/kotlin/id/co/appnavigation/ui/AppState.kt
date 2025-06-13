@@ -38,22 +38,20 @@ internal fun rememberAppState(
     windowSizeClass: WindowSizeClass = calculateWindowSizeClass(),
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
     navController: NavHostController = rememberNavController(),
-): AppState {
-    return remember(
-        navController,
-        coroutineScope,
-        windowSizeClass,
-        networkMonitor,
-        timeZoneMonitor,
-    ) {
-        AppState(
-            navController = navController,
-            coroutineScope = coroutineScope,
-            windowSizeClass = windowSizeClass,
-            networkMonitor = networkMonitor,
-            timeZoneMonitor = timeZoneMonitor,
-        )
-    }
+): AppState = remember(
+    navController,
+    coroutineScope,
+    windowSizeClass,
+    networkMonitor,
+    timeZoneMonitor,
+) {
+    AppState(
+        navController = navController,
+        coroutineScope = coroutineScope,
+        windowSizeClass = windowSizeClass,
+        networkMonitor = networkMonitor,
+        timeZoneMonitor = timeZoneMonitor,
+    )
 }
 
 @Stable

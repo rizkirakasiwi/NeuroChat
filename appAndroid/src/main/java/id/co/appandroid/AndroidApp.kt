@@ -27,7 +27,9 @@ import org.koin.android.ext.koin.androidLogger
  * @constructor Create empty Android app
  * @see Application
  */
-class AndroidApp : Application(), SingletonImageLoader.Factory {
+class AndroidApp :
+    Application(),
+    SingletonImageLoader.Factory {
     companion object {
         private const val MAX_SIZE_PERCENT = 0.25
     }
@@ -39,23 +41,22 @@ class AndroidApp : Application(), SingletonImageLoader.Factory {
         }
     }
 
-    override fun newImageLoader(context: PlatformContext): ImageLoader =
-        ImageLoader
-            .Builder(context)
-            .networkCachePolicy(CachePolicy.ENABLED)
-            .diskCachePolicy(CachePolicy.ENABLED)
-            .memoryCachePolicy(CachePolicy.ENABLED)
-            .diskCache {
-                DiskCache.Builder()
-                    .directory(context.cacheDir.resolve("image_cache"))
-                    .maxSizePercent(MAX_SIZE_PERCENT)
-                    .build()
-            }
-            .memoryCache {
-                MemoryCache.Builder()
-                    .maxSizePercent(context, MAX_SIZE_PERCENT)
-                    .build()
-            }
-            .crossfade(true)
-            .build()
+    override fun newImageLoader(context: PlatformContext): ImageLoader = ImageLoader
+        .Builder(context)
+        .networkCachePolicy(CachePolicy.ENABLED)
+        .diskCachePolicy(CachePolicy.ENABLED)
+        .memoryCachePolicy(CachePolicy.ENABLED)
+        .diskCache {
+            DiskCache.Builder()
+                .directory(context.cacheDir.resolve("image_cache"))
+                .maxSizePercent(MAX_SIZE_PERCENT)
+                .build()
+        }
+        .memoryCache {
+            MemoryCache.Builder()
+                .maxSizePercent(context, MAX_SIZE_PERCENT)
+                .build()
+        }
+        .crossfade(true)
+        .build()
 }

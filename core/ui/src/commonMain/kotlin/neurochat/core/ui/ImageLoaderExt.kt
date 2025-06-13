@@ -29,9 +29,7 @@ internal val LocalAppImageLoader = compositionLocalOf<ImageLoader?> { null }
  * @return An [ImageLoader] instance that can be used for image loading operations
  */
 @Composable
-fun rememberImageLoader(context: PlatformContext): ImageLoader {
-    return LocalAppImageLoader.current ?: rememberDefaultImageLoader(context)
-}
+fun rememberImageLoader(context: PlatformContext): ImageLoader = LocalAppImageLoader.current ?: rememberDefaultImageLoader(context)
 
 /**
  * Creates and remembers a default [ImageLoader] with memory cache and debug logging.
@@ -42,17 +40,15 @@ fun rememberImageLoader(context: PlatformContext): ImageLoader {
 private const val MAX_SIZE_PERCENT = 0.25
 
 @Composable
-internal fun rememberDefaultImageLoader(context: PlatformContext): ImageLoader {
-    return remember(context) {
-        ImageLoader.Builder(context)
-            .memoryCache {
-                MemoryCache.Builder()
-                    .maxSizePercent(context, MAX_SIZE_PERCENT)
-                    .build()
-            }
-            .logger(DebugLogger())
-            .build()
-    }
+internal fun rememberDefaultImageLoader(context: PlatformContext): ImageLoader = remember(context) {
+    ImageLoader.Builder(context)
+        .memoryCache {
+            MemoryCache.Builder()
+                .maxSizePercent(context, MAX_SIZE_PERCENT)
+                .build()
+        }
+        .logger(DebugLogger())
+        .build()
 }
 
 /**
@@ -66,14 +62,12 @@ internal fun rememberDefaultImageLoader(context: PlatformContext): ImageLoader {
 fun rememberImageRequest(
     context: PlatformContext,
     wallpaper: String,
-): ImageRequest {
-    return remember(wallpaper) {
-        ImageRequest.Builder(context)
-            .data(wallpaper)
-            .memoryCacheKey(wallpaper)
-            .placeholderMemoryCacheKey(wallpaper)
-            .build()
-    }
+): ImageRequest = remember(wallpaper) {
+    ImageRequest.Builder(context)
+        .data(wallpaper)
+        .memoryCacheKey(wallpaper)
+        .placeholderMemoryCacheKey(wallpaper)
+        .build()
 }
 
 /**

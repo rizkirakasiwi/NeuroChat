@@ -45,12 +45,10 @@ class DefaultValueObserver(
         key: String,
         default: T,
         getter: suspend () -> Result<T>,
-    ): Flow<T> {
-        return changeNotifier.observeKeyChanges(key)
-            // Trigger initial emission
-            .onStart { emit(DataStoreChangeEvent.ValueAdded(key, null)) }
-            .map { getter().getOrElse { default } }
-    }
+    ): Flow<T> = changeNotifier.observeKeyChanges(key)
+        // Trigger initial emission
+        .onStart { emit(DataStoreChangeEvent.ValueAdded(key, null)) }
+        .map { getter().getOrElse { default } }
 
     /**
      * Creates a flow that emits distinct values for the specified key, suppressing duplicates.
@@ -69,7 +67,5 @@ class DefaultValueObserver(
         key: String,
         default: T,
         getter: suspend () -> Result<T>,
-    ): Flow<T> {
-        return createValueFlow(key, default, getter).distinctUntilChanged()
-    }
+    ): Flow<T> = createValueFlow(key, default, getter).distinctUntilChanged()
 }

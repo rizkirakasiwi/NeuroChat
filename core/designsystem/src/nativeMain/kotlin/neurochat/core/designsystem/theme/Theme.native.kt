@@ -13,9 +13,7 @@ import androidx.compose.runtime.Composable
 actual fun colorScheme(
     useDarkTheme: Boolean,
     dynamicColor: Boolean,
-): ColorScheme {
-    return when {
-        useDarkTheme -> darkScheme
-        else -> lightScheme
-    }
+): ColorScheme = when {
+    useDarkTheme -> darkScheme
+    else -> lightScheme
 }

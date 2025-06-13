@@ -52,12 +52,11 @@ class PreferenceFlowOperators(
         key2: String,
         default2: T2,
         transform: suspend (T1, T2) -> R,
-    ): Flow<R> =
-        combine(
-            repository.observePreference(key1, default1),
-            repository.observePreference(key2, default2),
-            transform,
-        )
+    ): Flow<R> = combine(
+        repository.observePreference(key1, default1),
+        repository.observePreference(key2, default2),
+        transform,
+    )
 
     /**
      * Combines three preference flows and emits a value produced by the [transform] function.
@@ -84,13 +83,12 @@ class PreferenceFlowOperators(
         key3: String,
         default3: T3,
         transform: suspend (T1, T2, T3) -> R,
-    ): Flow<R> =
-        combine(
-            repository.observePreference(key1, default1),
-            repository.observePreference(key2, default2),
-            repository.observePreference(key3, default3),
-            transform,
-        )
+    ): Flow<R> = combine(
+        repository.observePreference(key1, default1),
+        repository.observePreference(key2, default2),
+        repository.observePreference(key3, default3),
+        transform,
+    )
 
     /**
      * Observes changes to any of the specified keys and emits the key that changed.
@@ -103,10 +101,9 @@ class PreferenceFlowOperators(
      * operators.observeAnyKeyChange("theme", "fontSize").collect { key -> println("Changed: $key") }
      * ```
      */
-    fun observeAnyKeyChange(vararg keys: String): Flow<String> =
-        repository.observePreferenceChanges()
-            .map { it.key }
-            .filter { it in keys }
+    fun observeAnyKeyChange(vararg keys: String): Flow<String> = repository.observePreferenceChanges()
+        .map { it.key }
+        .filter { it in keys }
 
     /**
      * Observes a preference and maps its value using the provided [transform] function.

@@ -43,12 +43,11 @@ sealed interface AppUiState {
                 ThemeBrand.ANDROID -> true
             }
 
-        override fun shouldUseDarkTheme(isSystemInDarkTheme: Boolean): Boolean =
-            when (userData.darkThemeConfig) {
-                DarkThemeConfig.FOLLOW_SYSTEM -> isSystemInDarkTheme
-                DarkThemeConfig.LIGHT -> false
-                DarkThemeConfig.DARK -> true
-            }
+        override fun shouldUseDarkTheme(isSystemInDarkTheme: Boolean): Boolean = when (userData.darkThemeConfig) {
+            DarkThemeConfig.FOLLOW_SYSTEM -> isSystemInDarkTheme
+            DarkThemeConfig.LIGHT -> false
+            DarkThemeConfig.DARK -> true
+        }
     }
 
     val shouldDisplayDynamicTheming: Boolean get() = true

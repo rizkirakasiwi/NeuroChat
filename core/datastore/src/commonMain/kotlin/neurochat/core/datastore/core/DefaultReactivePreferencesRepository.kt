@@ -54,9 +54,7 @@ class DefaultReactivePreferencesRepository(
     override suspend fun <T> getPreference(
         key: String,
         default: T,
-    ): Result<T> {
-        return reactiveDataStore.getValue(key, default)
-    }
+    ): Result<T> = reactiveDataStore.getValue(key, default)
 
     /**
      * {@inheritDoc}
@@ -65,9 +63,7 @@ class DefaultReactivePreferencesRepository(
         key: String,
         value: T,
         serializer: KSerializer<T>,
-    ): Result<Unit> {
-        return reactiveDataStore.putSerializableValue(key, value, serializer)
-    }
+    ): Result<Unit> = reactiveDataStore.putSerializableValue(key, value, serializer)
 
     /**
      * {@inheritDoc}
@@ -76,9 +72,7 @@ class DefaultReactivePreferencesRepository(
         key: String,
         default: T,
         serializer: KSerializer<T>,
-    ): Result<T> {
-        return reactiveDataStore.getSerializableValue(key, default, serializer)
-    }
+    ): Result<T> = reactiveDataStore.getSerializableValue(key, default, serializer)
 
     /**
      * {@inheritDoc}
@@ -99,9 +93,7 @@ class DefaultReactivePreferencesRepository(
     /**
      * {@inheritDoc}
      */
-    override suspend fun hasPreference(key: String): Boolean {
-        return reactiveDataStore.hasKey(key).getOrDefault(false)
-    }
+    override suspend fun hasPreference(key: String): Boolean = reactiveDataStore.hasKey(key).getOrDefault(false)
 
     // Reactive operations
 
@@ -111,9 +103,7 @@ class DefaultReactivePreferencesRepository(
     override fun <T> observePreference(
         key: String,
         default: T,
-    ): Flow<T> {
-        return reactiveDataStore.observeValue(key, default)
-    }
+    ): Flow<T> = reactiveDataStore.observeValue(key, default)
 
     /**
      * {@inheritDoc}
@@ -122,9 +112,7 @@ class DefaultReactivePreferencesRepository(
         key: String,
         default: T,
         serializer: KSerializer<T>,
-    ): Flow<T> {
-        return reactiveDataStore.observeSerializableValue(key, default, serializer)
-    }
+    ): Flow<T> = reactiveDataStore.observeSerializableValue(key, default, serializer)
 
     /**
      * {@inheritDoc}
@@ -138,22 +126,16 @@ class DefaultReactivePreferencesRepository(
     /**
      * {@inheritDoc}
      */
-    override fun observePreferenceCount(): Flow<Int> {
-        return reactiveDataStore.observeSize()
-    }
+    override fun observePreferenceCount(): Flow<Int> = reactiveDataStore.observeSize()
 
     /**
      * {@inheritDoc}
      */
-    override fun observePreferenceChanges(): Flow<DataStoreChangeEvent> {
-        return reactiveDataStore.observeChanges()
-    }
+    override fun observePreferenceChanges(): Flow<DataStoreChangeEvent> = reactiveDataStore.observeChanges()
 
     /**
      * {@inheritDoc}
      */
-    override fun observePreferenceChanges(key: String): Flow<DataStoreChangeEvent> {
-        return reactiveDataStore.observeChanges()
-            .filter { it.key == key || it.key == "*" }
-    }
+    override fun observePreferenceChanges(key: String): Flow<DataStoreChangeEvent> = reactiveDataStore.observeChanges()
+        .filter { it.key == key || it.key == "*" }
 }

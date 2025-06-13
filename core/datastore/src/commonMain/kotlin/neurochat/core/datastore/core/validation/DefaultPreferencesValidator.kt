@@ -29,48 +29,44 @@ class DefaultPreferencesValidator : PreferencesValidator {
     /**
      * {@inheritDoc}
      */
-    override fun validateKey(key: String): Result<Unit> {
-        return when {
-            key.isBlank() ->
-                Result.failure(
-                    InvalidKeyException("Key cannot be blank"),
-                )
+    override fun validateKey(key: String): Result<Unit> = when {
+        key.isBlank() ->
+            Result.failure(
+                InvalidKeyException("Key cannot be blank"),
+            )
 
-            key.length > MAX_KEY_LENGTH ->
-                Result.failure(
-                    InvalidKeyException("Key length cannot exceed 255 characters: '$key'"),
-                )
+        key.length > MAX_KEY_LENGTH ->
+            Result.failure(
+                InvalidKeyException("Key length cannot exceed 255 characters: '$key'"),
+            )
 
-            key.contains('\u0000') ->
-                Result.failure(
-                    InvalidKeyException("Key cannot contain null characters: '$key'"),
-                )
+        key.contains('\u0000') ->
+            Result.failure(
+                InvalidKeyException("Key cannot contain null characters: '$key'"),
+            )
 
-            else -> Result.success(Unit)
-        }
+        else -> Result.success(Unit)
     }
 
     /**
      * {@inheritDoc}
      */
-    override fun <T> validateValue(value: T): Result<Unit> {
-        return when (value) {
-            null ->
+    override fun <T> validateValue(value: T): Result<Unit> = when (value) {
+        null ->
+            Result.failure(
+                IllegalArgumentException("Value cannot be null"),
+            )
+
+        is String -> {
+            if (value.length > MAX_VALUE_LENGTH) {
                 Result.failure(
-                    IllegalArgumentException("Value cannot be null"),
+                    IllegalArgumentException("String value too large: ${value.length} characters"),
                 )
-
-            is String -> {
-                if (value.length > MAX_VALUE_LENGTH) {
-                    Result.failure(
-                        IllegalArgumentException("String value too large: ${value.length} characters"),
-                    )
-                } else {
-                    Result.success(Unit)
-                }
+            } else {
+                Result.success(Unit)
             }
-
-            else -> Result.success(Unit)
         }
+
+        else -> Result.success(Unit)
     }
 }

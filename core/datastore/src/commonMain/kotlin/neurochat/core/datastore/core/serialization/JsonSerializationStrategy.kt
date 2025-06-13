@@ -64,18 +64,16 @@ class JsonSerializationStrategy(
     override suspend fun <T> serialize(
         value: T,
         serializer: KSerializer<T>,
-    ): Result<String> {
-        return try {
-            val result = json.encodeToString(serializer, value)
-            Result.success(result)
-        } catch (e: Exception) {
-            Result.failure(
-                SerializationException(
-                    "Failed to serialize value of type ${value?.let { it::class.simpleName }}",
-                    e,
-                ),
-            )
-        }
+    ): Result<String> = try {
+        val result = json.encodeToString(serializer, value)
+        Result.success(result)
+    } catch (e: Exception) {
+        Result.failure(
+            SerializationException(
+                "Failed to serialize value of type ${value?.let { it::class.simpleName }}",
+                e,
+            ),
+        )
     }
 
     /**

@@ -65,10 +65,9 @@ class DataStoreFactory {
      * @param settings The [Settings] instance to use.
      * @return This [DataStoreFactory] instance for chaining.
      */
-    fun settings(settings: Settings) =
-        apply {
-            this.settings = settings
-        }
+    fun settings(settings: Settings) = apply {
+        this.settings = settings
+    }
 
     /**
      * Sets the coroutine [dispatcher] for data store operations.
@@ -78,10 +77,9 @@ class DataStoreFactory {
      * @param dispatcher The [CoroutineDispatcher] to use.
      * @return This [DataStoreFactory] instance for chaining.
      */
-    fun dispatcher(dispatcher: CoroutineDispatcher) =
-        apply {
-            this.dispatcher = dispatcher
-        }
+    fun dispatcher(dispatcher: CoroutineDispatcher) = apply {
+        this.dispatcher = dispatcher
+    }
 
     /**
      * Sets the cache size for the LRU cache.
@@ -91,10 +89,9 @@ class DataStoreFactory {
      * @param size The maximum number of entries in the cache.
      * @return This [DataStoreFactory] instance for chaining.
      */
-    fun cacheSize(size: Int) =
-        apply {
-            this.cacheSize = size
-        }
+    fun cacheSize(size: Int) = apply {
+        this.cacheSize = size
+    }
 
     /**
      * Sets a custom [PreferencesValidator] for validating keys and values.
@@ -104,10 +101,9 @@ class DataStoreFactory {
      * @param validator The [PreferencesValidator] to use.
      * @return This [DataStoreFactory] instance for chaining.
      */
-    fun validator(validator: PreferencesValidator) =
-        apply {
-            this.validator = validator
-        }
+    fun validator(validator: PreferencesValidator) = apply {
+        this.validator = validator
+    }
 
     /**
      * Sets a custom [SerializationStrategy] for serializing and deserializing values.
@@ -117,10 +113,9 @@ class DataStoreFactory {
      * @param strategy The [SerializationStrategy] to use.
      * @return This [DataStoreFactory] instance for chaining.
      */
-    fun serializationStrategy(strategy: SerializationStrategy) =
-        apply {
-            this.serializationStrategy = strategy
-        }
+    fun serializationStrategy(strategy: SerializationStrategy) = apply {
+        this.serializationStrategy = strategy
+    }
 
     /**
      * Sets a custom [ChangeNotifier] for broadcasting change events.
@@ -130,10 +125,9 @@ class DataStoreFactory {
      * @param notifier The [ChangeNotifier] to use.
      * @return This [DataStoreFactory] instance for chaining.
      */
-    fun changeNotifier(notifier: ChangeNotifier) =
-        apply {
-            this.changeNotifier = notifier
-        }
+    fun changeNotifier(notifier: ChangeNotifier) = apply {
+        this.changeNotifier = notifier
+    }
 
     /**
      * Builds and returns a [ReactivePreferencesRepository] with the current configuration.
@@ -237,9 +231,7 @@ class DataStoreFactory {
          * val repository = DataStoreFactory.create()
          * ```
          */
-        fun create(): ReactivePreferencesRepository {
-            return DataStoreFactory().build()
-        }
+        fun create(): ReactivePreferencesRepository = DataStoreFactory().build()
 
         /**
          * Creates a [ReactivePreferencesRepository] with a custom [Settings] instance.
@@ -254,11 +246,9 @@ class DataStoreFactory {
          * val repository = DataStoreFactory.create(customSettings)
          * ```
          */
-        fun create(settings: Settings): ReactivePreferencesRepository {
-            return DataStoreFactory()
-                .settings(settings)
-                .build()
-        }
+        fun create(settings: Settings): ReactivePreferencesRepository = DataStoreFactory()
+            .settings(settings)
+            .build()
 
         /**
          * Creates a [ReactivePreferencesRepository] with a custom [Settings] instance and [CoroutineDispatcher].
@@ -277,11 +267,9 @@ class DataStoreFactory {
         fun create(
             settings: Settings,
             dispatcher: CoroutineDispatcher,
-        ): ReactivePreferencesRepository {
-            return DataStoreFactory()
-                .settings(settings)
-                .dispatcher(dispatcher)
-                .build()
-        }
+        ): ReactivePreferencesRepository = DataStoreFactory()
+            .settings(settings)
+            .dispatcher(dispatcher)
+            .build()
     }
 }

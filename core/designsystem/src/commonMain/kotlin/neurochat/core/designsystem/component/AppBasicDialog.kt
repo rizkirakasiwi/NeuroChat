@@ -21,101 +21,99 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun AppBasicDialog(
     visibilityState: BasicDialogState,
     onDismissRequest: () -> Unit,
-): Unit =
-    when (visibilityState) {
-        BasicDialogState.Hidden -> Unit
-        is BasicDialogState.Shown -> {
-            AlertDialog(
-                onDismissRequest = onDismissRequest,
-                confirmButton = {
-                    AppTextButton(
-                        content = {
-                            Text(text = "Ok")
-                        },
-                        onClick = onDismissRequest,
-                        modifier = Modifier.testTag("AcceptAlertButton"),
-                    )
-                },
-                title =
-                visibilityState.title.let {
-                    {
-                        Text(
-                            text = it,
-                            style = MaterialTheme.typography.headlineSmall,
-                            modifier = Modifier.testTag("AlertTitleText"),
-                        )
-                    }
-                },
-                text = {
+): Unit = when (visibilityState) {
+    BasicDialogState.Hidden -> Unit
+    is BasicDialogState.Shown -> {
+        AlertDialog(
+            onDismissRequest = onDismissRequest,
+            confirmButton = {
+                AppTextButton(
+                    content = {
+                        Text(text = "Ok")
+                    },
+                    onClick = onDismissRequest,
+                    modifier = Modifier.testTag("AcceptAlertButton"),
+                )
+            },
+            title =
+            visibilityState.title.let {
+                {
                     Text(
-                        text = visibilityState.message,
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.testTag("AlertContentText"),
+                        text = it,
+                        style = MaterialTheme.typography.headlineSmall,
+                        modifier = Modifier.testTag("AlertTitleText"),
                     )
-                },
-                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                modifier =
-                Modifier.semantics {
-                    testTag = "AlertPopup"
-                },
-            )
-        }
+                }
+            },
+            text = {
+                Text(
+                    text = visibilityState.message,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.testTag("AlertContentText"),
+                )
+            },
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            modifier =
+            Modifier.semantics {
+                testTag = "AlertPopup"
+            },
+        )
     }
+}
 
 @Composable
 fun AppBasicDialog(
     visibilityState: BasicDialogState,
     onConfirm: () -> Unit,
     onDismissRequest: () -> Unit,
-): Unit =
-    when (visibilityState) {
-        BasicDialogState.Hidden -> Unit
-        is BasicDialogState.Shown -> {
-            AlertDialog(
-                onDismissRequest = onDismissRequest,
-                confirmButton = {
-                    AppTextButton(
-                        content = {
-                            Text(text = "Ok")
-                        },
-                        onClick = onConfirm,
-                        modifier = Modifier.testTag("AcceptAlertButton"),
-                    )
-                },
-                dismissButton = {
-                    AppTextButton(
-                        content = {
-                            Text(text = "Cancel")
-                        },
-                        onClick = onDismissRequest,
-                        modifier = Modifier.testTag("DismissAlertButton"),
-                    )
-                },
-                title =
-                visibilityState.title.let {
-                    {
-                        Text(
-                            text = it,
-                            style = MaterialTheme.typography.headlineSmall,
-                            modifier = Modifier.testTag("AlertTitleText"),
-                        )
-                    }
-                },
-                text = {
+): Unit = when (visibilityState) {
+    BasicDialogState.Hidden -> Unit
+    is BasicDialogState.Shown -> {
+        AlertDialog(
+            onDismissRequest = onDismissRequest,
+            confirmButton = {
+                AppTextButton(
+                    content = {
+                        Text(text = "Ok")
+                    },
+                    onClick = onConfirm,
+                    modifier = Modifier.testTag("AcceptAlertButton"),
+                )
+            },
+            dismissButton = {
+                AppTextButton(
+                    content = {
+                        Text(text = "Cancel")
+                    },
+                    onClick = onDismissRequest,
+                    modifier = Modifier.testTag("DismissAlertButton"),
+                )
+            },
+            title =
+            visibilityState.title.let {
+                {
                     Text(
-                        text = visibilityState.message,
-                        style = MaterialTheme.typography.bodyMedium,
-                        modifier = Modifier.testTag("AlertContentText"),
+                        text = it,
+                        style = MaterialTheme.typography.headlineSmall,
+                        modifier = Modifier.testTag("AlertTitleText"),
                     )
-                },
-                containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-                modifier =
-                Modifier.semantics {
-                    testTag = "AlertPopup"
-                },
-            )
-        }
+                }
+            },
+            text = {
+                Text(
+                    text = visibilityState.message,
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.testTag("AlertContentText"),
+                )
+            },
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            modifier =
+            Modifier.semantics {
+                testTag = "AlertPopup"
+            },
+        )
     }
+}
 
 @Preview
 @Composable

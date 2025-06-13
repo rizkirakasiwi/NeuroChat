@@ -159,12 +159,10 @@ class DefaultChangeNotifier(
      * @param change The event describing the change.
      * @return true if the event was emitted successfully, false otherwise
      */
-    fun tryNotifyChange(change: DataStoreChangeEvent): Boolean {
-        return if (!isCleared.load()) {
-            changeFlow.tryEmit(change)
-        } else {
-            false
-        }
+    fun tryNotifyChange(change: DataStoreChangeEvent): Boolean = if (!isCleared.load()) {
+        changeFlow.tryEmit(change)
+    } else {
+        false
     }
 
     /**
@@ -175,17 +173,15 @@ class DefaultChangeNotifier(
      *
      * @return A [Flow] emitting [DataStoreChangeEvent] instances as changes occur.
      */
-    override fun observeChanges(): Flow<DataStoreChangeEvent> {
-        return changeFlow
-            .onStart {
-                val count = activeObservers.incrementAndFetch()
-                println("[ChangeNotifier] New observer connected. Total: $count")
-            }
-            .onCompletion {
-                val count = activeObservers.decrementAndFetch()
-                println("[ChangeNotifier] Observer disconnected. Total: $count")
-            }
-    }
+    override fun observeChanges(): Flow<DataStoreChangeEvent> = changeFlow
+        .onStart {
+            val count = activeObservers.incrementAndFetch()
+            println("[ChangeNotifier] New observer connected. Total: $count")
+        }
+        .onCompletion {
+            val count = activeObservers.decrementAndFetch()
+            println("[ChangeNotifier] Observer disconnected. Total: $count")
+        }
 
     /**
      * Observes change events for a specific key.
@@ -193,10 +189,8 @@ class DefaultChangeNotifier(
      * @param key The key to observe for changes.
      * @return A [Flow] emitting [DataStoreChangeEvent] instances related to the specified key.
      */
-    override fun observeKeyChanges(key: String): Flow<DataStoreChangeEvent> {
-        return observeChanges().filter { event ->
-            event.key == key || event.key == "*"
-        }
+    override fun observeKeyChanges(key: String): Flow<DataStoreChangeEvent> = observeChanges().filter { event ->
+        event.key == key || event.key == "*"
     }
 
     /**

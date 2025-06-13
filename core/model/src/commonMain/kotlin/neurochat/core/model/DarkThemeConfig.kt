@@ -13,8 +13,6 @@ enum class DarkThemeConfig(val configName: String) {
     ;
 
     companion object {
-        fun fromString(value: String): DarkThemeConfig {
-            return entries.find { it.configName.equals(value, ignoreCase = true) } ?: FOLLOW_SYSTEM
-        }
+        fun fromString(value: String): DarkThemeConfig = entries.find { it.configName.equals(value, ignoreCase = true) } ?: FOLLOW_SYSTEM
     }
 }

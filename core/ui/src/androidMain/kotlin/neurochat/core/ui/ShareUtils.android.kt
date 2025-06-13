@@ -93,23 +93,21 @@ actual object ShareUtils {
     private suspend fun saveImage(
         image: Bitmap,
         context: Context,
-    ): Uri? {
-        return withContext(Dispatchers.IO) {
-            try {
-                val imagesFolder = File(context.cacheDir, "images")
-                imagesFolder.mkdirs()
-                val file = File(imagesFolder, "shared_image.png")
+    ): Uri? = withContext(Dispatchers.IO) {
+        try {
+            val imagesFolder = File(context.cacheDir, "images")
+            imagesFolder.mkdirs()
+            val file = File(imagesFolder, "shared_image.png")
 
-                val stream = FileOutputStream(file)
-                image.compress(Bitmap.CompressFormat.PNG, IMAGE_QUALITY, stream)
-                stream.flush()
-                stream.close()
+            val stream = FileOutputStream(file)
+            image.compress(Bitmap.CompressFormat.PNG, IMAGE_QUALITY, stream)
+            stream.flush()
+            stream.close()
 
-                FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
-            } catch (e: IOException) {
-                Log.d("saving bitmap", "saving bitmap error ${e.message}")
-                null
-            }
+            FileProvider.getUriForFile(context, "${context.packageName}.provider", file)
+        } catch (e: IOException) {
+            Log.d("saving bitmap", "saving bitmap error ${e.message}")
+            null
         }
     }
 }
