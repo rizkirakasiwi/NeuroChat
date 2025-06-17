@@ -6,23 +6,25 @@
  */
 package id.co.appnavigation.ui
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
-import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration.Indefinite
 import androidx.compose.material3.SnackbarHost
@@ -30,177 +32,114 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
 import app.navigation.generated.resources.Res
+import app.navigation.generated.resources.app_name
+import app.navigation.generated.resources.ask_anything
+import app.navigation.generated.resources.new_chat
 import app.navigation.generated.resources.not_connected
-import id.co.appnavigation.navigation.FeatureNavHost
-import id.co.appnavigation.utils.TopLevelDestination
-import neurochat.core.data.utils.NetworkMonitor
-import neurochat.core.data.utils.TimeZoneMonitor
-import neurochat.core.designsystem.component.AppNavigationBar
-import neurochat.core.designsystem.component.AppNavigationBarItem
-import neurochat.core.designsystem.component.AppNavigationRail
-import neurochat.core.designsystem.component.AppNavigationRailItem
+import id.co.appnavigation.ui.component.AppMainDrawer
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.launch
+import neurochat.core.designsystem.component.AppOutlinedTextField
+import neurochat.core.designsystem.component.AppText
+import neurochat.core.designsystem.component.AppTextButton
 import neurochat.core.designsystem.icon.AppIcons
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun App(
-    networkMonitor: NetworkMonitor,
-    timeZoneMonitor: TimeZoneMonitor,
+    state: MainState,
+    isOffline: Boolean,
+    isCompact: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val appState =
-        rememberAppState(
-            networkMonitor = networkMonitor,
-            timeZoneMonitor = timeZoneMonitor,
-        )
+    var askMe by rememberSaveable { mutableStateOf("") }
+    val scope = rememberCoroutineScope()
 
-    val snackbarHostState = remember { SnackbarHostState() }
-    val destination = appState.currentTopLevelDestination
+    val drawerInit = if (isCompact) DrawerValue.Closed else DrawerValue.Open
 
-    val isOffline by appState.isOffline.collectAsStateWithLifecycle()
+    val snackBarHostState = remember { SnackbarHostState() }
 
-    // If user is not connected to the internet show a snack bar to inform them.
+    val drawerState = rememberDrawerState(initialValue = drawerInit)
+
     val notConnectedMessage = stringResource(Res.string.not_connected)
-    LaunchedEffect(isOffline) {
-        if (isOffline) {
-            snackbarHostState.showSnackbar(
+
+    if (isOffline) {
+        LaunchedEffect(Unit) {
+            snackBarHostState.showSnackbar(
                 message = notConnectedMessage,
                 duration = Indefinite,
             )
         }
     }
 
-    Scaffold(
+    AppMainDrawer(
         modifier = modifier,
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-        bottomBar = {
-            if (appState.shouldShowBottomBar && destination != null) {
-                BottomBar(
-                    destinations = appState.topLevelDestinations,
-                    destinationsWithUnreadResources = emptySet(),
-                    onNavigateToDestination = appState::navigateToTopLevelDestination,
-                    currentDestination = appState.currentDestination,
-                    modifier = Modifier.testTag("NiaBottomBar"),
-                )
-            }
+        histories = if (state is MainState.HistoryLoaded) state.histories else persistentListOf(),
+        onHistoryClick = {},
+        drawerState = drawerState,
+        content = {
+            MainContent(
+                snackBarHostState = snackBarHostState,
+                askMe = askMe,
+                onAskMeChange = { askMe = it },
+                onMenuClick = {
+                    scope.launch {
+                        drawerState.toggle()
+                    }
+                },
+            )
         },
-    ) { padding ->
-        Row(
-            Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .consumeWindowInsets(padding)
-                .windowInsetsPadding(
-                    WindowInsets.safeDrawing.only(
-                        WindowInsetsSides.Horizontal,
-                    ),
-                ),
-        ) {
-            if (appState.shouldShowNavRail && destination != null) {
-                NavRail(
-                    destinations = appState.topLevelDestinations,
-                    destinationsWithUnreadResources = emptySet(),
-                    onNavigateToDestination = appState::navigateToTopLevelDestination,
-                    currentDestination = appState.currentDestination,
-                    modifier =
-                    Modifier
-                        .testTag("CmpNavRail")
-                        .safeDrawingPadding(),
-                )
-            }
+    )
+}
 
-            Column(Modifier.fillMaxSize()) {
-                // Show the top app bar on top level destinations.
-                if (destination != null) {
-                    AppBar(
-                        title = stringResource(destination.titleText),
-                        onNavigateToSettings = {
-                            // appState.navController.navigateToSettings()
-                        },
-                        onNavigateToEditProfile = {},
-                        onNavigateToNotification = {
-                            // appState.navController.navigateToNotification()
-                        },
-                        destination = destination,
-                    )
-                }
-
-                FeatureNavHost(
-                    navController = appState.navController,
-                )
-            }
-        }
-    }
+suspend fun DrawerState.toggle() {
+    if (isOpen) close() else open()
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AppBar(
     title: String,
-    onNavigateToSettings: () -> Unit,
-    onNavigateToEditProfile: () -> Unit,
-    onNavigateToNotification: () -> Unit,
-    destination: TopLevelDestination?,
+    onMenuClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     TopAppBar(
         title = { Text(text = title) },
+        navigationIcon = {
+            IconButton(
+                onClick = onMenuClick,
+                content = {
+                    Icon(AppIcons.ChatBubble, contentDescription = null)
+                },
+            )
+        },
         actions = {
-            Box {
-                when (destination) {
-                    TopLevelDestination.HOME -> {
-                        Row(
-                            horizontalArrangement = Arrangement.spacedBy(4.dp),
-                        ) {
-                            IconButton(
-                                onClick = onNavigateToNotification,
-                            ) {
-                                Icon(
-                                    imageVector = AppIcons.OutlinedNotifications,
-                                    contentDescription = "view notification",
-                                )
-                            }
-
-                            IconButton(
-                                onClick = onNavigateToSettings,
-                            ) {
-                                Icon(
-                                    imageVector = AppIcons.SettingsOutlined,
-                                    contentDescription = "view settings",
-                                )
-                            }
-                        }
+            AppTextButton(
+                text = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(AppIcons.Add, contentDescription = null)
+                        AppText(stringResource(Res.string.new_chat))
                     }
-
-                    TopLevelDestination.PROFILE -> {
-                        IconButton(
-                            onClick = onNavigateToEditProfile,
-                        ) {
-                            Icon(
-                                imageVector = AppIcons.Edit2,
-                                contentDescription = "Edit Profile",
-                            )
-                        }
-                    }
-
-                    else -> {}
-                }
-            }
+                },
+                onClick = {},
+            )
         },
         colors =
         TopAppBarDefaults.topAppBarColors(
@@ -211,107 +150,77 @@ private fun AppBar(
 }
 
 @Composable
-private fun NavRail(
-    destinations: List<TopLevelDestination>,
-    destinationsWithUnreadResources: Set<TopLevelDestination>,
-    onNavigateToDestination: (TopLevelDestination) -> Unit,
-    currentDestination: NavDestination?,
+private fun MainContent(
+    snackBarHostState: SnackbarHostState,
+    onMenuClick: () -> Unit,
+    askMe: String,
+    onAskMeChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    AppNavigationRail(modifier = modifier) {
-        destinations.forEach { destination ->
-            val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
-            val hasUnread = destinationsWithUnreadResources.contains(destination)
-            AppNavigationRailItem(
-                selected = selected,
-                onClick = { onNavigateToDestination(destination) },
-                icon = {
-                    Icon(
-                        imageVector = destination.unselectedIcon,
-                        contentDescription = null,
-                    )
-                },
-                modifier = if (hasUnread) {
-                    Modifier.notificationDot(
-                        MaterialTheme.colorScheme.tertiary,
-                    )
-                } else {
-                    Modifier
-                },
-                selectedIcon = {
-                    Icon(
-                        imageVector = destination.selectedIcon,
-                        contentDescription = null,
-                    )
-                },
-                label = { Text(stringResource(destination.iconText)) },
+    Scaffold(
+        modifier = modifier.navigationBarsPadding(),
+        snackbarHost = { SnackbarHost(snackBarHostState) },
+        topBar = {
+            AppBar(
+                title = stringResource(Res.string.app_name),
+                onMenuClick = onMenuClick,
             )
+        },
+    ) { padding ->
+        Column(
+            Modifier
+                .fillMaxSize()
+                .padding(padding)
+                .consumeWindowInsets(padding)
+                .windowInsetsPadding(
+                    WindowInsets.safeDrawing.only(
+                        WindowInsetsSides.Vertical,
+                    ),
+                ),
+        ) {
+            MainChatSection(modifier = Modifier.weight(1f))
+            ChatTextBox(askMe, onAskMeChange, modifier = Modifier.padding(16.dp))
+            Spacer(Modifier.height(16.dp))
         }
     }
 }
 
 @Composable
-private fun BottomBar(
-    destinations: List<TopLevelDestination>,
-    destinationsWithUnreadResources: Set<TopLevelDestination>,
-    onNavigateToDestination: (TopLevelDestination) -> Unit,
-    currentDestination: NavDestination?,
+private fun MainChatSection(modifier: Modifier = Modifier) {
+    Box(modifier = modifier)
+}
+
+@Composable
+private fun ChatTextBox(
+    askMe: String,
+    onAskMeChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    AppNavigationBar(
+    AppOutlinedTextField(
+        value = askMe,
+        onValueChange = onAskMeChange,
+        label = stringResource(Res.string.ask_anything),
         modifier = modifier,
-    ) {
-        destinations.forEach { destination ->
-            val hasUnread = destinationsWithUnreadResources.contains(destination)
-            val selected = currentDestination.isTopLevelDestinationInHierarchy(destination)
-            AppNavigationBarItem(
-                selected = selected,
-                onClick = { onNavigateToDestination(destination) },
-                icon = {
-                    Icon(
-                        imageVector = destination.unselectedIcon,
-                        contentDescription = null,
-                    )
-                },
-                modifier = if (hasUnread) {
-                    Modifier.notificationDot(
-                        MaterialTheme.colorScheme.tertiary,
-                    )
-                } else {
-                    Modifier
-                },
-                selectedIcon = {
-                    Icon(
-                        imageVector = destination.selectedIcon,
-                        contentDescription = null,
-                    )
-                },
-                label = { Text(stringResource(destination.iconText)) },
-            )
-        }
-    }
-}
-
-@Suppress("MagicNumber")
-private fun Modifier.notificationDot(
-    color: Color,
-): Modifier = this then drawWithContent {
-    drawContent()
-    drawCircle(
-        color,
-        radius = 5.dp.toPx(),
-        // This is based on the dimensions of the NavigationBar's "indicator pill";
-        // however, its parameters are private, so we must depend on them implicitly
-        // (NavigationBarTokens.ActiveIndicatorWidth = 64.dp)
-        center =
-        center +
-            Offset(
-                64.dp.toPx() * .45f,
-                32.dp.toPx() * -.45f - 6.dp.toPx(),
-            ),
+        trailingIcon = {
+            Row {
+                IconButton(
+                    onClick = {},
+                ) {
+                    Icon(AppIcons.Mic, contentDescription = null)
+                }
+                IconButton(
+                    onClick = {},
+                ) {
+                    Icon(AppIcons.Send, contentDescription = null)
+                }
+            }
+        },
+        leadingIcon = {
+            IconButton(
+                onClick = {},
+            ) {
+                Icon(AppIcons.Add, contentDescription = null)
+            }
+        },
     )
 }
-
-private fun NavDestination?.isTopLevelDestinationInHierarchy(destination: TopLevelDestination) = this?.hierarchy?.any {
-    it.route?.contains(destination.name, true) == true
-} == true

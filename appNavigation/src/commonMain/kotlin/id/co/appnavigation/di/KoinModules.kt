@@ -7,6 +7,7 @@
 package id.co.appnavigation.di
 
 import id.co.appnavigation.AppViewModel
+import id.co.appnavigation.ui.MainViewModel
 import neurochat.core.common.di.DispatchersModule
 import neurochat.core.data.di.DataModule
 import neurochat.core.datastore.di.DatastoreModule
@@ -27,6 +28,7 @@ object KoinModules {
     private val AppModule =
         module {
             viewModelOf(::AppViewModel)
+            viewModelOf(::MainViewModel)
         }
 
     val allModules =

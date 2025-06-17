@@ -6,6 +6,7 @@
  */
 import com.neuro.chat.convention.AppBuildType
 import com.neuro.chat.convention.dynamicVersion
+import com.neuro.chat.convention.implementation
 
 plugins {
     alias(libs.plugins.convention.application.android)
@@ -93,6 +94,8 @@ dependencies {
     implementation(libs.koin.compose.viewmodel)
 
     implementation(libs.coil.kt)
+    implementation(libs.coil.network.ktor)
+    implementation(libs.ktor.client.cio)
 
     runtimeOnly(libs.androidx.compose.runtime)
     debugImplementation(libs.androidx.compose.ui.tooling)

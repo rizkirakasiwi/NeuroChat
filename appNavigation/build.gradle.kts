@@ -19,6 +19,7 @@ kotlin {
         commonMain.dependencies {
             // Core Modules
             implementation(projects.core.data)
+            implementation(projects.core.ui)
             implementation(projects.core.model)
             implementation(projects.core.common)
             implementation(projects.core.datastore)
@@ -36,6 +37,7 @@ kotlin {
             implementation(libs.window.size)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.coil.kt.compose)
         }
     }
 }

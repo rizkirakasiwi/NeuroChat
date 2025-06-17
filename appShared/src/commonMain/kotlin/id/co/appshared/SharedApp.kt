@@ -6,6 +6,8 @@
  */
 package id.co.appshared
 
+import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
+import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import coil3.compose.LocalPlatformContext
@@ -15,11 +17,15 @@ import neurochat.core.platform.context.LocalContext
 import neurochat.core.ui.LocalImageLoaderProvider
 import neurochat.core.ui.rememberImageLoader
 
+@OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 @Composable
-fun SharedApp(modifier: Modifier = Modifier) {
+fun SharedApp(
+    modifier: Modifier = Modifier,
+) {
+    val windowSizeClass = calculateWindowSizeClass()
     LocalManagerProvider(LocalContext.current) {
         LocalImageLoaderProvider(rememberImageLoader(LocalPlatformContext.current)) {
-            ComposeApp(modifier = modifier)
+            ComposeApp(modifier = modifier, windowSizeClass = windowSizeClass)
         }
     }
 }

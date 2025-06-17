@@ -10,7 +10,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import app.navigation.generated.resources.Res
 import app.navigation.generated.resources.app_name
 import app.navigation.generated.resources.home
-import app.navigation.generated.resources.profile
 import neurochat.core.designsystem.icon.AppIcons
 import org.jetbrains.compose.resources.StringResource
 
@@ -30,11 +29,5 @@ enum class TopLevelDestination(
         unselectedIcon = AppIcons.HomeBoarder,
         iconText = Res.string.home,
         titleText = Res.string.app_name,
-    ),
-    PROFILE(
-        selectedIcon = AppIcons.Profile,
-        unselectedIcon = AppIcons.ProfileBoarder,
-        iconText = Res.string.profile,
-        titleText = Res.string.profile,
     ),
 }
