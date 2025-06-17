@@ -24,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
@@ -53,6 +54,7 @@ fun AppOutlinedTextField(
     singleLine: Boolean = true,
     maxLines: Int = if (singleLine) 1 else Int.MAX_VALUE,
     minLines: Int = 1,
+    shape: Shape = MaterialTheme.shapes.medium,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     keyboardOptions: KeyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
     trailingIcon: @Composable (() -> Unit)? = null,
@@ -66,6 +68,7 @@ fun AppOutlinedTextField(
         label = { Text(text = label) },
         onValueChange = onValueChange,
         textStyle = textStyle,
+        shape = shape,
         modifier = modifier.fillMaxWidth(),
         enabled = enabled,
         readOnly = readOnly,
